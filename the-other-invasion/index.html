@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="The Other Invasion, a novel of Guadalcanal, 1942-43. Coming soon.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}html{scroll-behavior:smooth}</style>
+</head>
+<body>
+<title>The Other Invasion</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@500;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Courier+Prime:wght@400;700&family=La+Belle+Aurore&display=swap">
+<style>
+/* Layout: one long night. A still basin of water opens the page, then the 2 a.m. silence,
+   three witnesses (each with one thing to try), the four parts of the campaign, the first pages, and the call to action. */
+:root {
+  color-scheme: dark;
+  --ink: #0b1514;        /* jungle night */
+  --ink-2: #111f1d;      /* raised panels */
+  --line: #263835;       /* rules, borders */
+  --fg: #e4e0d4;         /* text */
+  --muted: #8fa09a;      /* secondary text */
+  --flare: #efd48c;      /* parachute flare, the one accent */
+  --sea: #5f9a95;        /* the sound at night */
+  --fire: #d9733f;       /* a burning ship, used once */
+  --paper: #e8dfc6;      /* Yael's ledger */
+  --paper-ink: #27304a;  /* ledger ink */
+  --paper-rule: #b9c3cc;
+  --f-display: "Big Shoulders Stencil Display", "Arial Narrow", Impact, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "Courier Prime", "Courier New", Courier, monospace;
+  --f-hand: "La Belle Aurore", "Segoe Script", cursive;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+body { background: var(--ink); color: var(--fg); font-family: var(--f-body); font-size: 18px; line-height: 1.6; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-left: var(--gutter-l); padding-right: var(--gutter-r); }
+h1, h2, h3 { text-wrap: balance; margin: 0; font-weight: 500; }
+p { margin: 0; }
+a { color: var(--flare); }
+button { font: inherit; }
+:focus-visible { outline: 2px solid var(--flare); outline-offset: 3px; }
+.eyebrow { font-family: var(--f-mono); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border: 1px solid var(--flare); color: var(--ink); background: var(--flare); font-family: var(--f-mono); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; text-decoration: none; border-radius: 2px; }
+.btn.ghost { background: transparent; color: var(--flare); }
+.btn:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: .5; cursor: default; }
+
+/* Hero: the basin */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+#basin { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero .wrap { position: relative; padding-block: 88px 72px; display: grid; gap: 28px; }
+.hero h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(56px, 13vw, 156px); line-height: .86; letter-spacing: .01em; text-transform: uppercase; }
+.hero h1 span { display: block; color: var(--flare); }
+.hero .lede { font-size: clamp(20px, 2.6vw, 26px); font-style: italic; max-width: 30ch; }
+.hero .sub { color: var(--muted); max-width: 52ch; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.log { font-family: var(--f-mono); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 22px; }
+.log b { color: var(--fg); font-weight: 400; }
+
+section { padding-block: 80px; border-bottom: 1px solid var(--line); }
+.sec-head { display: grid; gap: 12px; margin-bottom: 36px; max-width: 62ch; }
+.sec-head h2 { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: clamp(36px, 6vw, 60px); line-height: .95; }
+.sec-head p { color: var(--muted); }
+
+/* 2 a.m. */
+.night { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+@media (max-width: 760px) { .night { grid-template-columns: 1fr; } }
+#chorus { width: 100%; aspect-ratio: 4 / 3; max-width: 100%; display: block; background: var(--ink-2); border: 1px solid var(--line); }
+.caption { min-height: 7.5em; font-size: 22px; font-style: italic; line-height: 1.45; }
+.caption small { display: block; margin-top: 12px; font-family: var(--f-mono); font-style: normal; font-size: 13px; color: var(--muted); letter-spacing: .08em; }
+.night-controls { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; align-items: center; }
+.toggle { font-family: var(--f-mono); font-size: 13px; color: var(--muted); display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+.toggle input { accent-color: var(--flare); width: 16px; height: 16px; }
+
+/* Witnesses */
+.tabs { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
+.tab { background: none; border: 0; border-bottom: 3px solid transparent; color: var(--muted); padding: 12px 18px 10px; cursor: pointer; text-align: left; display: grid; gap: 2px; }
+.tab .n { font-family: var(--f-display); font-weight: 800; font-size: 28px; text-transform: uppercase; line-height: 1; }
+.tab .r { font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--flare); }
+.tab[aria-selected="true"] .n { color: var(--flare); }
+.panel[hidden] { display: none; }
+.panel { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px; }
+@media (max-width: 820px) { .panel { grid-template-columns: 1fr; } }
+.who { display: grid; gap: 16px; align-content: start; }
+.who h3 { font-size: 26px; line-height: 1.2; }
+.who .verb { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: 18px; letter-spacing: .06em; color: var(--sea); }
+.who blockquote { margin: 0; padding-left: 16px; border-left: 2px solid var(--line); font-style: italic; color: var(--fg); }
+.who blockquote cite { display: block; font-style: normal; font-family: var(--f-mono); font-size: 12px; color: var(--muted); margin-top: 8px; letter-spacing: .06em; }
+.stage { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.stage .note { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: transparent; color: var(--fg); border: 1px solid var(--line); padding: 8px 14px; font-family: var(--f-mono); font-size: 13px; cursor: pointer; border-radius: 2px; }
+.chip[aria-pressed="true"] { border-color: var(--flare); color: var(--flare); }
+.readout { display: flex; flex-wrap: wrap; gap: 8px 28px; font-family: var(--f-mono); font-size: 14px; }
+.readout div { display: grid; }
+.readout span { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.readout b { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 22px; color: var(--fg); }
+.readout b.hot { color: var(--flare); }
+
+#savo { width: 100%; height: auto; display: block; background: var(--ink-2); border: 1px solid var(--line); }
+#slot { width: 100%; aspect-ratio: 16 / 10; max-width: 100%; display: block; border: 1px solid var(--line); transition: transform .6s ease; transform-origin: 50% 60%; }
+.slot-frame { overflow: hidden; border-radius: 2px; }
+.hold { touch-action: none; user-select: none; -webkit-user-select: none; }
+
+.ledger { background: var(--paper); color: var(--paper-ink); border-radius: 2px; box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+.ledger-head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; padding: 14px 20px 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; border-bottom: 2px solid #9a4b3f; color: #5a5a68; }
+#ledgerBody { height: 340px; overflow-y: auto; padding: 0 20px 24px; background-image: repeating-linear-gradient(to bottom, transparent 0 33px, var(--paper-rule) 33px 34px); background-attachment: local; overscroll-behavior: contain; }
+.entry { height: 34px; display: grid; grid-template-columns: 9.5em 1fr; align-items: end; gap: 12px; padding-bottom: 3px; }
+.entry .d { font-family: var(--f-mono); font-size: 12px; color: #6a6a78; font-variant-numeric: tabular-nums; }
+.entry .w { font-family: var(--f-hand); font-size: 21px; line-height: 1; }
+.entry.last { height: auto; padding-block: 10px 4px; align-items: start; }
+.entry.last .w { font-size: 19px; line-height: 1.6; color: #7a2a22; }
+
+/* Campaign */
+.parts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+@media (max-width: 820px) { .parts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 460px) { .parts { grid-template-columns: 1fr; } }
+.part { padding: 20px 20px 24px 0; display: grid; gap: 8px; align-content: start; border-bottom: 1px solid var(--line); }
+.part + .part { padding-left: 20px; border-left: 1px solid var(--line); }
+@media (max-width: 820px) { .part:nth-child(3) { border-left: 0; padding-left: 0; } }
+@media (max-width: 460px) { .part + .part { border-left: 0; padding-left: 0; } }
+.part .k { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+.part h3 { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: 36px; line-height: 1; color: var(--flare); }
+.part .dates { font-family: var(--f-mono); font-size: 13px; }
+.part p { font-size: 16px; color: var(--muted); }
+
+/* Excerpt */
+.excerpt { max-width: 64ch; display: grid; gap: 1em; }
+.excerpt-body { display: grid; gap: 1em; }
+.excerpt-body.clipped { max-height: 22em; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent); mask-image: linear-gradient(to bottom, #000 60%, transparent); }
+.excerpt-body p:first-child::first-letter { font-family: var(--f-display); font-weight: 800; float: left; font-size: 3.6em; line-height: .8; padding: 6px 10px 0 0; color: var(--flare); }
+.chap { font-family: var(--f-mono); font-size: 13px; color: var(--muted); letter-spacing: .06em; }
+
+/* Call to action */
+.cta { text-align: left; display: grid; gap: 22px; }
+.cta h2 { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; font-size: clamp(48px, 10vw, 112px); line-height: .9; }
+.cta p { max-width: 52ch; color: var(--muted); }
+.stamp { display: inline-block; font-family: var(--f-display); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--flare); border: 2px solid var(--flare); padding: 6px 14px; transform: rotate(-3deg); width: max-content; }
+footer { padding-block: 32px 48px; font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { #slot { transition: none; } }
+</style>
+
+<header class="hero">
+  <canvas id="basin" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <p class="eyebrow">A novel of Guadalcanal &middot; August 1942 &ndash; February 1943</p>
+    <h1>The Other <span>Invasion</span></h1>
+    <p class="lede">Something on this island was older than the war. And it had been waiting a long time for someone to arrive.</p>
+    <p class="sub">On the morning eleven thousand Marines came ashore, a woman on the high ground above the Lunga watched a basin of water move for the first time in a hundred and ten years. She was not the only one who noticed.</p>
+    <div class="actions">
+      <a class="btn" href="#night">Hear the island go quiet</a>
+      <a class="btn ghost" href="#witnesses">Meet the three witnesses</a>
+    </div>
+    <div class="log" aria-label="Landing details">
+      <span>Red Beach <b>0910, 7 Aug 1942</b></span>
+      <span>Enemy fire on landing <b>none</b></span>
+      <span>Basin above the Lunga <b>moving since 0611</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="night">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">First night ashore &middot; 0200</p>
+      <h2>The jungle was supposed to be loud</h2>
+      <p>The Marines were told the racket would keep them awake for a week. Press play with your sound on. It runs about forty seconds.</p>
+    </div>
+    <div class="night">
+      <canvas id="chorus" aria-label="Each dot is one voice in the jungle at night"></canvas>
+      <div>
+        <p class="caption" id="caption" aria-live="polite">Birds. Insects. Frogs the size of your fist. You'll go mad from it, he'd said, and laughed.<small>Each dot is one voice in the dark.</small></p>
+        <div class="night-controls">
+          <button class="btn" id="playNight" type="button">&#9654; Play the night</button>
+          <label class="toggle" for="soundOn"><input type="checkbox" id="soundOn" checked> Sound on</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="witnesses">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Three witnesses</p>
+      <h2>One counts. One calculates. One watches.</h2>
+      <p>A Marine sergeant, a Japanese fighter pilot and the last keeper of a family duty. Each of them sees something they cannot report. Pick one.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Characters">
+      <button class="tab" role="tab" id="t-cal" aria-controls="p-cal" aria-selected="true"><span class="n">Calloway</span><span class="r">Sergeant, USMC</span></button>
+      <button class="tab" role="tab" id="t-hiro" aria-controls="p-hiro" aria-selected="false" tabindex="-1"><span class="n">Hiro</span><span class="r">Ensign, Tainan Air Group</span></button>
+      <button class="tab" role="tab" id="t-yael" aria-controls="p-yael" aria-selected="false" tabindex="-1"><span class="n">Yael</span><span class="r">The high ground</span></button>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-cal" aria-labelledby="t-cal">
+      <div class="who">
+        <p class="verb">He counts</p>
+        <h3>Sergeant Chris Calloway counts his twelve men at every halt. He has done it since Parris Island.</h3>
+        <p>On the night of August 8, he stands on the beach at Lunga Point and watches the sea battle off Savo. He counts the ships. So do the men next to him.</p>
+        <blockquote>&ldquo;You think one of us is gonna wander off, Sarge?&rdquo;<br>&ldquo;I think a man can lose anything here.&rdquo;<cite>Chapter One</cite></blockquote>
+      </div>
+      <div class="stage">
+        <svg id="savo" viewBox="20 0 770 250" role="img" aria-label="Ships silhouetted on the sound off Savo Island at night"></svg>
+        <p class="note">Same water, same light, same minute. Count it as each man did.</p>
+        <div class="controls" id="counters"></div>
+        <div class="readout" aria-live="polite">
+          <div><span>Counted by</span><b id="cWho">&mdash;</b></div>
+          <div><span>Ships</span><b id="cNum" class="hot">&mdash;</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-hiro" aria-labelledby="t-hiro" hidden>
+      <div class="who">
+        <p class="verb">He calculates</p>
+        <h3>Ensign Hiro Tetsuo Nakajima flies a Zero five hundred and sixty miles from Rabaul to Guadalcanal, and five hundred and sixty back.</h3>
+        <p>His old instructor taught him to fly by the numbers, because the numbers stay true when your hands are shaking. Halfway down the Slot, banking to hold his place on the leader's wing, he looks down at the water.</p>
+        <blockquote>A man who has just seen something impossible will reach for the nearest true thing and hold onto it.<cite>Chapter Two</cite></blockquote>
+      </div>
+      <div class="stage">
+        <div class="slot-frame"><canvas id="slot" aria-label="The Slot seen from four thousand metres"></canvas></div>
+        <div class="controls">
+          <button class="btn hold" id="bank" type="button">Hold to bank left</button>
+        </div>
+        <div class="readout" aria-live="polite">
+          <div><span>Altitude</span><b>4,000 m</b></div>
+          <div><span>Fuel burn</span><b>67 L/h</b></div>
+          <div><span>Engine</span><b>1,200 rpm</b></div>
+          <div><span>Below</span><b id="hNote" class="hot">sea</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-yael" aria-labelledby="t-yael" hidden>
+      <div class="who">
+        <p class="verb">She watches</p>
+        <h3>Every morning of her life, Yael bat Miriam walks up to a stone on the high ground and looks at the water in it.</h3>
+        <p>Five generations of her family have done the same at four places above the Lunga, and written down what they saw. Her mother told her the water would always be still, and that one day it would not.</p>
+        <blockquote>Page after page after page of it, two and a half thousand entries, the most boring document in the Pacific.<cite>Chapter Three</cite></blockquote>
+      </div>
+      <div class="stage">
+        <div class="ledger">
+          <div class="ledger-head"><span>Burns Philp &middot; Accounts</span><span id="lCount">Vol. IV</span></div>
+          <div id="ledgerBody" tabindex="0" aria-label="Yael's ledger, one line a day"></div>
+        </div>
+        <div class="controls">
+          <button class="btn" id="turn" type="button">Turn to August 1942</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="campaign">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Four parts &middot; six months</p>
+      <h2>Named for the ground they were fought on</h2>
+    </div>
+    <div class="parts">
+      <div class="part"><span class="k">Part One</span><h3>Savo</h3><span class="dates">Aug 7 &ndash; 21, 1942</span><p>The island shaped like a hat at the mouth of the sound, and the first night the guns went off around it.</p></div>
+      <div class="part"><span class="k">Part Two</span><h3>Lunga</h3><span class="dates">Sep 4 &ndash; Oct 14, 1942</span><p>The river, the airfield and the perimeter, and the ridge to the south of it.</p></div>
+      <div class="part"><span class="k">Part Three</span><h3>Ironbottom</h3><span class="dates">Oct 15 &ndash; Dec 9, 1942</span><p>The sailors' name for the sound, after everything that went down into it.</p></div>
+      <div class="part"><span class="k">Part Four</span><h3>Esperance</h3><span class="dates">Dec 1942 &ndash; Feb 1943</span><p>The cape at the far western end of the island, where the campaign runs out of land.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="excerpt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">From Chapter One</p>
+      <h2>The camp was empty. The rice was still hot.</h2>
+      <p class="chap">Calloway &mdash; Red Beach, Guadalcanal. August 7, 1942.</p>
+    </div>
+    <div class="excerpt">
+      <div class="excerpt-body clipped" id="exBody">
+<p>They found the camp at a little after two in the afternoon, on rising ground where a spur of the jungle broke and opened into a cleared patch maybe sixty yards across.</p>
+<p>Ruiz was on point and put up a fist and everybody went flat, and Calloway came up beside him and looked through the ferns at a laborers&#x27; bivouac laid out as neat as a fairground.</p>
+<p>Tents in two rows. Palm-thatch lean-tos with sleeping mats rolled and stacked. A cook fire in a stone ring at the centre, and a long plank table, and mosquito nets strung between poles. Someone had swept the ground. There were tracks in the swept dirt where the broom had gone, curved, overlapping, tidy.</p>
+<p>They watched it for nine minutes. Calloway timed it on his wristwatch because there was nothing else to do with his hands. Nothing moved but the mosquito netting, which moved because there was a wind, and Calloway kept telling himself that: because there is a wind.</p>
+<p>Then Hoyt sent two fire teams around the flanks and they went in, and it was empty, and it was worse than empty.</p>
+<p>Rice in the pots over the fire ring. Calloway put the back of his fingers against the iron and pulled them away and shook his hand out and looked at Doc Merrigan and said, &quot;It&#x27;s hot.&quot;</p>
+<p>&quot;Fire&#x27;s still got coals in it.&quot;</p>
+<p>&quot;It&#x27;s hot, Doc.&quot;</p>
+<p>There were bowls set out. Twenty, thirty bowls on the plank table, half of them with rice still in them, chopsticks laid across the rims or dropped where they fell. A tin cup on its side with tea still spreading out of it into the wood grain, still dark, still wet at the leading edge. Half a dozen bottles of Asahi beer standing in a row, three of them opened, one of them a quarter drunk and beaded with sweat. Cigarettes in a saucer, two of them burned down to the paper, one of them with an inch of ash holding its shape.</p>
+<p>Dombrowski said it again from somewhere behind him. &quot;Where are they?&quot;</p>
+<p>And the men started going through the tents, because that&#x27;s what men do, and the tents were full of everything a man owns. Boots, paired and set out. Shaving kits. A shirt half-mended with the needle still stuck through it, threaded. Photographs — a woman in a garden, a boy in a school uniform, an old couple sitting very straight in a studio somewhere with a painted backdrop of a mountain. Letters in a language none of them could read, folded and stacked and tied with string. A calendar with dates crossed off in red pencil up to and including today.</p>
+<p>Two-Bit Harris found a phonograph and got as far as putting his hand on the crank before Calloway said his name once and he took his hand off it.</p>
+<p>&quot;Sarge, they ran,&quot; Bickel said. He was holding somebody&#x27;s toothbrush. He seemed unaware he was holding it. &quot;The Navy shelled the hell out of them and they ran and left their chow, that&#x27;s all this is.&quot;</p>
+<p>&quot;Sure.&quot;</p>
+<p>&quot;That&#x27;s all it is.&quot;</p>
+<p>Calloway walked the perimeter of the clearing instead of answering, and that was when he found the thing that he did not tell anyone about, not that day and not for a long time after.</p>
+<p>At the western edge of the camp the swept ground stopped in a clean line where the jungle started, and the tracks went out of the camp into the trees — the pressed-down grass, the churned mud at the lip of the treeline, the mess that two or three hundred men make when they leave a place in a hurry. That was all correct. That was what running looked like.</p>
+<p>But the mud at the treeline had been walked back over.</p>
+<p>Not many. Not a crowd. One set, maybe two, coming out of the jungle toward the camp, laid down over the top of the outbound mess, unhurried — the prints even and square and evenly spaced, the way a man walks when he has all the time in the world. They came out of the trees, crossed the churned ground, and stopped eight feet in, on the swept dirt, where the broom marks were.</p>
+<p>And then there was nothing. No prints going on. No prints going back. The swept dirt was smooth for the next fifty yards to the fire ring, curved and overlapping and tidy, and no one had walked across it at all.</p>
+<p>Calloway stood there in the heat with the flies starting to find the rice, and looked at the last two prints in the mud, and did the only useful thing he could think of.</p>
+<p>He turned around and counted his squad.</p>
+<p>Twelve.</p>
+<p>He counted them again anyway.</p>
+      </div>
+      <div><button class="btn ghost" id="exMore" type="button" aria-expanded="false" aria-controls="exBody">Keep reading</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="soon" style="border-bottom:0">
+  <div class="wrap cta">
+    <span class="stamp">Coming soon</span>
+    <h2>The Other Invasion</h2>
+    <p>A novel in four parts, told by three people who each saw something they could not report. Release details are on the way.</p>
+    <div class="actions" style="display:flex;flex-wrap:wrap;gap:12px">
+      <a class="btn" href="#excerpt">Read the opening again</a>
+      <a class="btn ghost" href="#top" id="toTop">Back to the basin</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer><div class="wrap">The Other Invasion &middot; Guadalcanal, 1942&ndash;43</div></footer>
+
+<script>
+(function () {
+  const css = getComputedStyle(document.documentElement);
+  const C = k => css.getPropertyValue(k).trim();
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dpr = () => Math.min(2, window.devicePixelRatio || 1);
+  function fit(cv) {
+    const r = cv.getBoundingClientRect();
+    cv.width = Math.max(1, Math.round(r.width * dpr()));
+    cv.height = Math.max(1, Math.round(r.height * dpr()));
+    return cv.getContext('2d');
+  }
+
+  /* ---------- Hero basin: rings from the centre, slower than breath ---------- */
+  const basin = document.getElementById('basin');
+  let bctx = fit(basin);
+  const PERIOD = 6.5;
+  function drawBasin(t) {
+    const w = basin.width, h = basin.height, cx = w * 0.72, cy = h * 0.52;
+    bctx.fillStyle = C('--ink'); bctx.fillRect(0, 0, w, h);
+    const R = Math.max(w, h) * 0.55;
+    const g = bctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+    g.addColorStop(0, 'rgba(95,154,149,0.16)'); g.addColorStop(1, 'rgba(95,154,149,0)');
+    bctx.fillStyle = g; bctx.fillRect(0, 0, w, h);
+    const rings = reduce ? [0.45] : [0, 1, 2].map(i => ((t / PERIOD) + i / 3) % 1);
+    rings.forEach(p => {
+      const r = p * R;
+      bctx.strokeStyle = 'rgba(239,212,140,' + (0.28 * (1 - p)).toFixed(3) + ')';
+      bctx.lineWidth = 1.2 * dpr();
+      bctx.beginPath(); bctx.ellipse(cx, cy, r, r * 0.42, 0, 0, Math.PI * 2); bctx.stroke();
+    });
+    // the rim: rings stop at it and do not reflect back
+    bctx.strokeStyle = 'rgba(228,224,212,0.07)'; bctx.lineWidth = 2 * dpr();
+    bctx.beginPath(); bctx.ellipse(cx, cy, R, R * 0.42, 0, 0, Math.PI * 2); bctx.stroke();
+    // a scrim so the type stays readable
+    const s = bctx.createLinearGradient(0, 0, w, 0);
+    s.addColorStop(0, 'rgba(11,21,20,0.9)'); s.addColorStop(0.55, 'rgba(11,21,20,0.35)'); s.addColorStop(1, 'rgba(11,21,20,0)');
+    bctx.fillStyle = s; bctx.fillRect(0, 0, w, h);
+  }
+
+  /* ---------- 2 a.m.: the chorus ---------- */
+  const chorus = document.getElementById('chorus');
+  let cctx = fit(chorus);
+  const voices = [];
+  (function seed() {
+    let s = 7; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+    for (let i = 0; i < 90; i++) voices.push({ x: 0.06 + rnd() * 0.88, y: 0.18 + Math.pow(rnd(), 0.8) * 0.74, ph: rnd() * 6.28, sp: 2 + rnd() * 9, kind: i % 3, off: 0, die: 0.15 + rnd() * 0.85 });
+  })();
+  let mode = 'chorus', modeT = 0, birdBurst = 0, westPulse = 0;
+  function drawChorus(t) {
+    const w = chorus.width, h = chorus.height;
+    cctx.fillStyle = C('--ink-2'); cctx.fillRect(0, 0, w, h);
+    // canopy line
+    cctx.strokeStyle = 'rgba(143,160,154,0.18)'; cctx.lineWidth = 1 * dpr();
+    cctx.beginPath();
+    for (let x = 0; x <= w; x += 8) cctx.lineTo(x, h * 0.13 + Math.sin(x * 0.03) * 6 * dpr() + Math.sin(x * 0.011) * 10 * dpr());
+    cctx.stroke();
+    cctx.font = (11 * dpr()) + 'px ' + C('--f-mono'); cctx.fillStyle = 'rgba(143,160,154,0.6)';
+    cctx.fillText('WEST', 10 * dpr(), h - 12 * dpr());
+    if (westPulse > 0) {
+      const r = (1 - westPulse) * w * 0.7;
+      cctx.strokeStyle = 'rgba(239,212,140,' + (0.5 * westPulse).toFixed(3) + ')'; cctx.lineWidth = 2 * dpr();
+      cctx.beginPath(); cctx.arc(-w * 0.05, h * 0.6, r, 0, Math.PI * 2); cctx.stroke();
+    }
+    voices.forEach(v => {
+      let a;
+      if (v.off >= 1 && birdBurst <= 0) a = 0.05;
+      else if (birdBurst > 0) a = 0.35 + 0.65 * Math.abs(Math.sin(t * (14 + v.sp * 3) + v.ph));
+      else a = (0.35 + 0.65 * Math.abs(Math.sin(t * v.sp * 0.6 + v.ph))) * (1 - v.off) + 0.05 * v.off;
+      const col = birdBurst > 0 ? '239,212,140' : (v.kind === 0 ? '95,154,149' : v.kind === 1 ? '228,224,212' : '143,160,154');
+      cctx.fillStyle = 'rgba(' + col + ',' + a.toFixed(3) + ')';
+      cctx.beginPath(); cctx.arc(v.x * w, v.y * h, (2.2 + v.kind) * dpr(), 0, Math.PI * 2); cctx.fill();
+    });
+  }
+
+  /* Synthesised soundscape (Web Audio, no files) */
+  let ac = null, master = null, live = [];
+  function noiseBuffer() {
+    const b = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return b;
+  }
+  function startJungle() {
+    // cicada band: noise, bandpassed, buzzing amplitude
+    const n = ac.createBufferSource(); n.buffer = noiseBuffer(); n.loop = true;
+    const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 5200; bp.Q.value = 4;
+    const g = ac.createGain(); g.gain.value = 0.12;
+    const lfo = ac.createOscillator(); lfo.frequency.value = 38; const lg = ac.createGain(); lg.gain.value = 0.08;
+    lfo.connect(lg); lg.connect(g.gain);
+    n.connect(bp); bp.connect(g); g.connect(master); n.start(); lfo.start();
+    live.push({ g, stop: () => { n.stop(); lfo.stop(); }, at: 0.55 });
+    // crickets: pulsed sine
+    [4300, 4700, 3900].forEach((f, i) => {
+      const o = ac.createOscillator(); o.frequency.value = f;
+      const og = ac.createGain(); og.gain.value = 0;
+      const p = ac.createOscillator(); p.type = 'square'; p.frequency.value = 3 + i * 1.7;
+      const pg = ac.createGain(); pg.gain.value = 0.018;
+      p.connect(pg); pg.connect(og.gain); o.connect(og); og.connect(master); o.start(); p.start();
+      live.push({ g: og, stop: () => { o.stop(); p.stop(); }, at: 0.2 + i * 0.25 });
+    });
+    // frogs: random low blips
+    const frogG = ac.createGain(); frogG.gain.value = 1; frogG.connect(master);
+    let frogTimer = setInterval(() => {
+      if (!ac) return;
+      const t0 = ac.currentTime, o = ac.createOscillator(), og = ac.createGain();
+      o.frequency.setValueAtTime(260 + Math.random() * 300, t0); o.frequency.exponentialRampToValueAtTime(180, t0 + 0.12);
+      og.gain.setValueAtTime(0, t0); og.gain.linearRampToValueAtTime(0.06, t0 + 0.02); og.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.16);
+      o.connect(og); og.connect(frogG); o.start(t0); o.stop(t0 + 0.2);
+    }, 230);
+    live.push({ g: frogG, stop: () => clearInterval(frogTimer), at: 0.9 });
+  }
+  function silenceJungle(dur) {
+    const t0 = ac.currentTime;
+    live.forEach(v => { v.g.gain.cancelScheduledValues(t0); v.g.gain.setTargetAtTime(0, t0 + v.at * dur, 0.08); });
+    setTimeout(() => { live.forEach(v => { try { v.stop(); } catch (e) {} }); live = []; }, (dur + 1) * 1000);
+  }
+  function farSound() {
+    const t0 = ac.currentTime;
+    const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 220;
+    const g = ac.createGain(); g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.5, t0 + 1.6); g.gain.setValueAtTime(0.5, t0 + 3.2); g.gain.linearRampToValueAtTime(0, t0 + 4.8);
+    lp.connect(g); g.connect(master);
+    [41, 61.5, 83].forEach((f, i) => {
+      const o = ac.createOscillator(); o.type = i ? 'sine' : 'triangle';
+      o.frequency.setValueAtTime(f, t0); o.frequency.linearRampToValueAtTime(f * 0.86, t0 + 4.8);
+      const v = ac.createOscillator(); v.frequency.value = 0.7 + i * 0.3; const vg = ac.createGain(); vg.gain.value = f * 0.02;
+      v.connect(vg); vg.connect(o.frequency);
+      o.connect(lp); o.start(t0); v.start(t0); o.stop(t0 + 5); v.stop(t0 + 5);
+    });
+  }
+  function birds(dur) {
+    const t0 = ac.currentTime;
+    for (let i = 0; i < 140; i++) {
+      const s = t0 + Math.random() * dur, o = ac.createOscillator(), og = ac.createGain();
+      const f = 1800 + Math.random() * 2600;
+      o.type = Math.random() < 0.3 ? 'sawtooth' : 'sine';
+      o.frequency.setValueAtTime(f, s); o.frequency.exponentialRampToValueAtTime(f * (0.6 + Math.random() * 0.9), s + 0.18);
+      const fade = 1 - (s - t0) / dur * 0.7;
+      og.gain.setValueAtTime(0, s); og.gain.linearRampToValueAtTime(0.03 * fade, s + 0.02); og.gain.exponentialRampToValueAtTime(0.0001, s + 0.25);
+      o.connect(og); og.connect(master); o.start(s); o.stop(s + 0.3);
+    }
+  }
+
+  const caption = document.getElementById('caption');
+  const playBtn = document.getElementById('playNight');
+  const soundOn = document.getElementById('soundOn');
+  function say(html) { caption.innerHTML = html; }
+  let timers = [];
+  function runNight() {
+    timers.forEach(clearTimeout); timers = [];
+    voices.forEach(v => v.off = 0); birdBurst = 0; westPulse = 0; mode = 'chorus';
+    if (master) { try { master.gain.value = 0; } catch (e) {} }
+    live.forEach(v => { try { v.stop(); } catch (e) {} }); live = [];
+    const audio = soundOn.checked;
+    if (audio) {
+      try {
+        ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+        ac.resume();
+        master = ac.createGain(); master.gain.value = 0.9; master.connect(ac.destination);
+        startJungle();
+      } catch (e) { ac = null; }
+    }
+    playBtn.disabled = true;
+    const at = (s, fn) => timers.push(setTimeout(fn, s * 1000));
+    say('It was loud until about two in the morning.<small>Red Beach perimeter &middot; 7&ndash;8 August</small>');
+    at(9, () => {
+      say('Then, over the space of perhaps twenty seconds, every living thing on that island stopped making noise at once.<small>Compressed here to six</small>');
+      mode = 'dying'; modeT = performance.now();
+      if (ac && audio) silenceJungle(6);
+    });
+    at(16, () => say('He heard forty men breathing and not one other thing. No insects. No bird. No frog.<small>It lasted maybe four minutes</small>'));
+    at(23, () => {
+      say('Then something in the dark, a long way off toward the west, made a sound that Calloway had no name for.<small>&nbsp;</small>');
+      westPulse = 1;
+      if (ac && audio) farSound();
+    });
+    at(29.5, () => {
+      say('And every bird on Guadalcanal started screaming at the same time, and did not stop until dawn.<small>Chapter One</small>');
+      birdBurst = 1;
+      if (ac && audio) birds(7);
+    });
+    at(37, () => { playBtn.disabled = false; playBtn.innerHTML = '&#8635; Play it again'; });
+  }
+  playBtn.addEventListener('click', runNight);
+
+  /* ---------- Calloway: counting ships off Savo ---------- */
+  const svg = document.getElementById('savo');
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  // 16 slots across the sound; each man's count sees a different set
+  const slots = [60, 105, 150, 190, 240, 282, 330, 372, 420, 462, 505, 548, 600, 640, 690, 735];
+  const sizes = [1, .8, 1.2, .9, 1.1, .75, 1.3, .9, 1, .85, 1.15, .8, 1, .9, 1.05, .8];
+  const base = [0, 2, 3, 5, 6, 8, 9, 10, 12, 13, 14]; // eleven
+  const sets = {
+    'Calloway': { set: base, n: 11 },
+    'Two-Bit Harris': { set: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14], n: 14 },
+    'Whitlock': { set: [0, 2, 3, 6, 8, 9, 12, 13, 14], n: 9 },
+    'Lt. Hoyt': { set: base.concat(['ghost']), n: 12 }
+  };
+  svg.appendChild(el('rect', { x: 0, y: 0, width: 800, height: 300, fill: C('--ink-2') }));
+  for (let i = 0; i < 4; i++) svg.appendChild(el('circle', { cx: 120 + i * 190, cy: 30 + (i % 2) * 14, r: 3, fill: C('--flare'), opacity: .85 }));
+  svg.appendChild(el('path', { d: 'M560 200 C 590 150, 650 140, 690 150 C 720 158, 745 185, 770 200 Z', fill: '#0e1a19' }));
+  const savoLabel = el('text', { x: 665, y: 140, fill: C('--muted'), 'font-family': 'Courier Prime, monospace', 'font-size': 12, 'text-anchor': 'middle' }); savoLabel.textContent = 'SAVO'; svg.appendChild(savoLabel);
+  svg.appendChild(el('rect', { x: 0, y: 200, width: 800, height: 100, fill: '#0a1312' }));
+  svg.appendChild(el('line', { x1: 0, y1: 200, x2: 800, y2: 200, stroke: C('--sea'), 'stroke-width': 1, opacity: .5 }));
+  const shipG = [];
+  slots.forEach((x, i) => {
+    const s = sizes[i], g = el('g', { transform: 'translate(' + x + ',200) scale(' + s + ')' });
+    g.appendChild(el('path', { d: 'M-26 0 L-22 -7 L-8 -7 L-6 -16 L-2 -16 L0 -24 L3 -16 L8 -16 L10 -9 L22 -9 L26 0 Z', fill: '#c9c4b5' }));
+    if (i === 6) { const f = el('ellipse', { cx: 0, cy: -20, rx: 10, ry: 14, fill: C('--fire'), opacity: .8 }); f.classList.add('burn'); g.appendChild(f); }
+    const lab = el('text', { x: 0, y: -34, 'text-anchor': 'middle', fill: C('--flare'), 'font-family': 'Courier Prime, monospace', 'font-size': 15, 'font-weight': 700, opacity: 0 });
+    g.appendChild(lab); svg.appendChild(g); shipG.push({ g, lab, s });
+  });
+  const ghost = el('g', { transform: 'translate(780,203)', opacity: 0 });
+  ghost.appendChild(el('path', { d: 'M-70 0 Q -40 -6 0 -3 L 4 1 Q -40 4 -70 0 Z', fill: '#2f3d3b' }));
+  const ghostLab = el('text', { x: -36, y: -14, 'text-anchor': 'middle', fill: C('--flare'), 'font-family': 'Courier Prime, monospace', 'font-size': 15, 'font-weight': 700, opacity: 0 });
+  ghost.appendChild(ghostLab); svg.appendChild(ghost);
+  function showSet(list) {
+    shipG.forEach((o, i) => { o.g.style.transition = 'opacity .5s'; o.g.style.opacity = list.includes(i) ? 1 : 0; o.lab.setAttribute('opacity', 0); });
+    ghost.style.transition = 'opacity .8s'; ghost.style.opacity = list.includes('ghost') ? .9 : 0; ghostLab.setAttribute('opacity', 0);
+  }
+  showSet(base);
+  const counters = document.getElementById('counters');
+  const cWho = document.getElementById('cWho'), cNum = document.getElementById('cNum');
+  let countTimers = [];
+  Object.keys(sets).forEach(name => {
+    const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = name; b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => {
+      countTimers.forEach(clearTimeout); countTimers = [];
+      counters.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b ? 'true' : 'false'));
+      const { set, n } = sets[name];
+      showSet(set); cWho.textContent = name; cNum.textContent = '…';
+      const order = set.slice().sort((a, b2) => (a === 'ghost' ? 99 : a) - (b2 === 'ghost' ? 99 : b2));
+      order.forEach((idx, k) => countTimers.push(setTimeout(() => {
+        const lab = idx === 'ghost' ? ghostLab : shipG[idx].lab;
+        lab.textContent = k + 1; lab.setAttribute('opacity', 1);
+        if (k === order.length - 1) {
+          cNum.textContent = n;
+          if (idx === 'ghost') countTimers.push(setTimeout(() => { ghost.style.opacity = 0; }, 1400));
+        }
+      }, (reduce ? 0 : 500) + k * (reduce ? 0 : 260))));
+    });
+    counters.appendChild(b);
+  });
+
+  /* ---------- Hiro: the Slot from 4,000 m ---------- */
+  const slot = document.getElementById('slot');
+  let sctx = null, holding = false, seen = 0, shapeX = 0.18;
+  const hNote = document.getElementById('hNote');
+  function drawSlot(t, dt) {
+    if (!sctx) return;
+    const w = slot.width, h = slot.height;
+    const g = sctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, '#0f4c63'); g.addColorStop(1, '#0a3247');
+    sctx.fillStyle = g; sctx.fillRect(0, 0, w, h);
+    // islands on both sides, surf drawn as one white line
+    const isl = (pts) => {
+      sctx.beginPath(); pts.forEach((p, i) => i ? sctx.lineTo(p[0] * w, p[1] * h) : sctx.moveTo(p[0] * w, p[1] * h)); sctx.closePath();
+      sctx.fillStyle = '#21402e'; sctx.fill(); sctx.strokeStyle = 'rgba(255,255,255,.55)'; sctx.lineWidth = 1.5 * dpr(); sctx.stroke();
+    };
+    isl([[0, 0], [.42, 0], [.36, .08], [.22, .14], [.12, .2], [0, .26]]);
+    isl([[.55, 0], [.7, 0], [.66, .05], [.58, .06]]);
+    isl([[.62, 1], [.72, .86], [.86, .8], [1, .7], [1, 1]]);
+    isl([[0, .92], [.14, .86], [.24, .9], [.3, 1], [0, 1]]);
+    // reef shadows
+    sctx.fillStyle = 'rgba(80,170,180,.18)';
+    [[.3, .62, 60, 18], [.8, .35, 40, 12], [.5, .2, 30, 9]].forEach(r => { sctx.beginPath(); sctx.ellipse(r[0] * w, r[1] * h, r[2] * dpr(), r[3] * dpr(), -.5, 0, 6.28); sctx.fill(); });
+    // the thing: long, darker than the water, with an edge, no wake
+    if (seen > 0.01) {
+      shapeX += dt * 0.025;
+      if (shapeX > 0.9) shapeX = 0.18;
+      const cx = shapeX * w, cy = (0.62 - (shapeX - 0.18) * 0.35) * h;
+      sctx.save(); sctx.translate(cx, cy); sctx.rotate(-0.38);
+      sctx.globalAlpha = 0.55 * seen;
+      sctx.fillStyle = '#04141c';
+      const L = 0.34 * w, H = 0.022 * w;
+      sctx.beginPath(); sctx.moveTo(-L / 2, 0); sctx.quadraticCurveTo(-L / 2.4, -H, 0, -H); sctx.lineTo(L / 2.1, -H * .6); sctx.lineTo(L / 2, 0); sctx.lineTo(L / 2.1, H * .6); sctx.lineTo(0, H); sctx.quadraticCurveTo(-L / 2.4, H, -L / 2, 0); sctx.fill();
+      sctx.restore(); sctx.globalAlpha = 1;
+    }
+    // formation shadow marks: three small chevrons (the bombers below)
+    sctx.strokeStyle = 'rgba(228,224,212,.7)'; sctx.lineWidth = 1.5 * dpr();
+    [[.45, .45], [.5, .5], [.4, .5]].forEach(p => { const x = p[0] * w, y = p[1] * h, s = 7 * dpr(); sctx.beginPath(); sctx.moveTo(x - s, y + s); sctx.lineTo(x, y); sctx.lineTo(x + s, y + s); sctx.stroke(); });
+    sctx.font = (11 * dpr()) + 'px ' + C('--f-mono'); sctx.fillStyle = 'rgba(228,224,212,.75)';
+    sctx.fillText('NEW GEORGIA', 0.03 * w, 0.06 * h + 10 * dpr());
+    sctx.fillText('SANTA ISABEL', 0.74 * w, 0.92 * h);
+    sctx.fillText('THE SLOT  →  GUADALCANAL', 0.03 * w, 0.8 * h);
+  }
+  const bank = document.getElementById('bank');
+  let holdStart = 0, releaseTimer = null;
+  function press(e) {
+    e.preventDefault();
+    holding = true; holdStart = performance.now();
+    slot.style.transform = 'rotate(-9deg) scale(1.18)';
+    hNote.textContent = 'something long';
+    clearTimeout(releaseTimer);
+  }
+  function release() {
+    if (!holding) return;
+    holding = false;
+    slot.style.transform = '';
+    const held = (performance.now() - holdStart) / 1000;
+    hNote.textContent = held > 1.5 ? 'it has an edge' : 'sea';
+    releaseTimer = setTimeout(() => { hNote.textContent = 'He checked his fuel.'; }, 1600);
+  }
+  bank.addEventListener('pointerdown', press);
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => bank.addEventListener(ev, release));
+  bank.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !holding) press(e); });
+  bank.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') release(); });
+
+  /* ---------- Yael: the ledger ---------- */
+  const lb = document.getElementById('ledgerBody');
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const start = Date.UTC(1935, 7, 7), end = Date.UTC(1942, 7, 6);
+  const frag = document.createDocumentFragment();
+  let count = 0;
+  for (let t = start; t <= end; t += 864e5) {
+    const d = new Date(t), row = document.createElement('div'); row.className = 'entry';
+    row.innerHTML = '<span class="d">' + d.getUTCDate() + ' ' + months[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + '</span><span class="w">still.</span>';
+    frag.appendChild(row); count++;
+  }
+  const last = document.createElement('div'); last.className = 'entry last'; last.id = 'aug7';
+  last.innerHTML = '<span class="d">7 Aug 1942</span><span class="w">Not still. One ring from the centre to the rim, then another. Slow. Cord slack, a hand’s width. All four places. My hand is steady.</span>';
+  frag.appendChild(last);
+  lb.appendChild(frag);
+  document.getElementById('lCount').textContent = 'Vol. IV · ' + (count + 1).toLocaleString() + ' entries';
+  document.getElementById('turn').addEventListener('click', () => {
+    const target = last.offsetTop - lb.clientHeight + last.offsetHeight + 20;
+    if (reduce) { lb.scrollTop = target; return; }
+    const from = lb.scrollTop, dist = target - from, t0 = performance.now(), D = 4200;
+    (function step(now) {
+      const p = Math.min(1, (now - t0) / D), e = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      lb.scrollTop = from + dist * e;
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  });
+
+  /* ---------- Tabs ---------- */
+  const tabs = [...document.querySelectorAll('.tab')];
+  function select(tab) {
+    tabs.forEach(t => {
+      const on = t === tab; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (tab.id === 't-hiro') sctx = fit(slot);
+    try { localStorage.setItem('toi-tab', tab.id); } catch (e) {}
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; select(n); n.focus(); }
+    });
+  });
+  try { const saved = localStorage.getItem('toi-tab'); if (saved && document.getElementById(saved)) select(document.getElementById(saved)); } catch (e) {}
+
+  /* ---------- Excerpt ---------- */
+  const exBody = document.getElementById('exBody'), exMore = document.getElementById('exMore');
+  exMore.addEventListener('click', () => {
+    const open = exBody.classList.toggle('clipped') === false;
+    exMore.setAttribute('aria-expanded', open); exMore.textContent = open ? 'Show less' : 'Keep reading';
+  });
+  document.getElementById('toTop').addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+
+  /* ---------- Loop ---------- */
+  let lastT = performance.now();
+  function frame(now) {
+    const t = now / 1000, dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
+    drawBasin(t);
+    if (mode === 'dying') {
+      const p = (now - modeT) / 6000;
+      voices.forEach(v => { v.off = Math.max(0, Math.min(1, (p - v.die * 0.9) / 0.1)); });
+      if (p > 1.1) mode = 'silent';
+    }
+    if (westPulse > 0) westPulse = Math.max(0, westPulse - dt / 4.5);
+    if (birdBurst > 0) birdBurst = Math.max(0, birdBurst - dt / 7);
+    drawChorus(t);
+    seen += ((holding ? 1 : 0) - seen) * Math.min(1, dt * (holding ? 1.6 : 6));
+    if (!document.getElementById('p-hiro').hidden) drawSlot(t, dt);
+    const burn = document.querySelector('.burn'); if (burn) burn.setAttribute('opacity', (0.55 + 0.35 * Math.abs(Math.sin(t * 7))).toFixed(2));
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize', () => { bctx = fit(basin); cctx = fit(chorus); if (!document.getElementById('p-hiro').hidden) sctx = fit(slot); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { cctx = fit(chorus); });
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>
