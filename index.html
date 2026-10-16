@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prophecy of the Listener</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+  /* Layout: one deep-sea table. Gauges on top, tone dial, the hand as the stage, piles + log beneath, card index folded away. */
+  :root {
+    color-scheme: dark;
+    --bg:#0b1b2b; --bg-deep:#071321; --panel:#12263a; --panel-2:#0f2133; --line:#1d3851; --line-2:#245276;
+    --accent:#35b6ff; --gold:#f2c066; --text:#e7f4ff; --muted:#8fb3c9; --soft:#cfe3f5;
+    --danger:#ff6b6b; --success:#4be1a0;
+    --t-calm:#17485a; --t-emp:#3b3e75; --t-ref:#2a4b6e; --t-cur:#2f516a; --t-vul:#4b3552;
+    --t-calm-hi:#5fd4e6; --t-emp-hi:#9aa0ff; --t-ref-hi:#79b4ff; --t-cur-hi:#7fe0c4; --t-vul-hi:#e59ae8;
+    --display:"Marcellus", "Palatino Linotype", Georgia, serif;
+    --body:"Source Sans 3", ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  html, body { background:var(--bg); color:var(--text); }
+  body { font-family:var(--body); font-size:15px; line-height:1.4; margin:0; }
+  .wrap { max-width:1180px; margin:0 auto; padding-block:14px 40px; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); display:flex; flex-direction:column; gap:14px; }
+
+  header { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; justify-content:space-between; }
+  h1 { font-family:var(--display); font-weight:400; font-size:clamp(22px, 4vw, 30px); margin:0; letter-spacing:0.5px; text-wrap:balance; }
+  h1 small { display:block; font-family:var(--body); font-size:13px; color:var(--muted); letter-spacing:0.2px; margin-top:2px; }
+  .head-btns { display:flex; gap:8px; flex-wrap:wrap; }
+
+  .btn { font:inherit; font-weight:600; font-size:14px; background:linear-gradient(180deg,#1d3c59,#133147); border:1px solid var(--line-2); color:var(--text); padding:8px 14px; border-radius:8px; cursor:pointer; transition:filter .15s, transform .1s; }
+  .btn:hover { filter:brightness(1.15); }
+  .btn:active { transform:translateY(1px); }
+  .btn:disabled { opacity:0.45; cursor:not-allowed; filter:none; }
+  .btn:focus-visible, .card:focus-visible, .tone-btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .btn.primary { background:linear-gradient(180deg,#2a6a98,#1a4a70); border-color:#3d86ba; }
+  .btn.pulse { animation:pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow:0 0 0 0 rgba(53,182,255,0); } 50% { box-shadow:0 0 0 6px rgba(53,182,255,.25); } }
+
+  .panel { background:var(--panel); border:1px solid #1c3952; border-radius:12px; padding:14px; position:relative; }
+  .label { font-size:12px; color:var(--muted); letter-spacing:0.6px; text-transform:uppercase; }
+
+  /* Gauges */
+  .gauges { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .gauge { background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:12px; position:relative; overflow:visible; display:flex; flex-direction:column; gap:8px; min-width:0; }
+  .gauge-top { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .big { font-family:var(--display); font-size:30px; line-height:1; font-variant-numeric:tabular-nums; }
+  .big .of { font-size:15px; color:var(--muted); font-family:var(--body); }
+  .meter { height:10px; border-radius:99px; background:#0a1826; border:1px solid var(--line); overflow:hidden; position:relative; }
+  .meter > i { display:block; height:100%; width:0; border-radius:99px; transition:width .5s cubic-bezier(.3,1.4,.5,1); }
+  .meter.res > i { background:linear-gradient(90deg, #1f7fb8, var(--accent), #9fe3ff); }
+  .meter.ins > i { background:linear-gradient(90deg, #7a3a4a, #d9534f, var(--danger)); }
+  .meter.ins.hot > i { animation:throb 0.9s ease-in-out infinite; }
+  @keyframes throb { 50% { filter:brightness(1.5); } }
+  .pills { display:flex; gap:6px; flex-wrap:wrap; }
+  .pill { display:inline-flex; align-items:center; gap:6px; background:#0b1c2c; padding:4px 10px; border-radius:999px; border:1px solid var(--line); font-size:13px; font-variant-numeric:tabular-nums; position:relative; }
+  .pill strong { font-size:14px; }
+  .pill.warn { border-color:#7a3a4a; color:#ffc2c2; }
+  .bump { animation:bump .45s ease; }
+  @keyframes bump { 30% { transform:scale(1.25); } }
+
+  .float { position:absolute; pointer-events:none; font-weight:700; font-size:18px; text-shadow:0 2px 6px rgba(0,0,0,.6); animation:floatUp 1.1s ease-out forwards; white-space:nowrap; z-index:5; }
+  .float.good { color:var(--success); } .float.bad { color:var(--danger); } .float.info { color:var(--gold); } .float.blue { color:#9fe3ff; }
+  @keyframes floatUp { 0% { opacity:0; transform:translateY(6px) scale(.8); } 15% { opacity:1; transform:translateY(0) scale(1.1); } 100% { opacity:0; transform:translateY(-38px) scale(1); } }
+
+  /* Tone dial */
+  .tonebar { display:flex; flex-direction:column; gap:8px; }
+  .tonebar-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .tonebar-head .hint { font-size:13px; color:var(--muted); }
+  .tones { display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; }
+  .tone-btn { font:inherit; color:var(--text); cursor:pointer; border-radius:10px; padding:8px 6px; border:1px solid var(--line-2); background:var(--tc, #17485a); display:flex; flex-direction:column; align-items:center; gap:2px; transition:transform .15s, box-shadow .2s, opacity .2s; opacity:.7; min-width:0; }
+  .tone-btn .tn { font-weight:700; font-size:14px; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+  .tone-btn .tc { font-size:12px; color:var(--soft); }
+  .tone-btn:hover { opacity:1; }
+  .tone-btn[aria-pressed="true"] { opacity:1; border-color:var(--th); box-shadow:0 0 0 2px var(--th), 0 0 18px -2px var(--th); transform:translateY(-2px); }
+  .tone-btn:disabled { cursor:not-allowed; }
+
+  .tone { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px; border:1px solid #2b4b66; color:#d8e9f8; background:var(--tc); }
+  [data-tone="Calm"] { --tc:var(--t-calm); --th:var(--t-calm-hi); }
+  [data-tone="Empathetic"] { --tc:var(--t-emp); --th:var(--t-emp-hi); }
+  [data-tone="Reflective"] { --tc:var(--t-ref); --th:var(--t-ref-hi); }
+  [data-tone="Curious"] { --tc:var(--t-cur); --th:var(--t-cur-hi); }
+  [data-tone="Vulnerable"] { --tc:var(--t-vul); --th:var(--t-vul-hi); }
+
+  /* Hand */
+  .hand-head { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+  .hand-head .left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .pips { display:inline-flex; gap:5px; align-items:center; }
+  .pip { width:12px; height:12px; border-radius:50%; border:1px solid var(--accent); background:var(--accent); box-shadow:0 0 8px rgba(53,182,255,.6); transition:all .3s; }
+  .pip.used { background:transparent; box-shadow:none; border-color:#2b4b66; }
+  .pips.shake { animation:shake .4s; }
+  .turn { font-size:13px; color:var(--muted); }
+  .hand { display:grid; grid-template-columns:repeat(auto-fill, minmax(168px, 1fr)); gap:12px; min-height:220px; }
+  .empty-hand { color:var(--muted); font-size:14px; align-self:center; }
+
+  .card { font:inherit; text-align:left; color:var(--text); background:linear-gradient(170deg, #143049 0%, #102436 55%); border:1px solid var(--line-2); border-radius:12px; padding:12px; position:relative; box-shadow:0 4px 12px rgba(0,0,0,0.35); display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:transform .18s ease, box-shadow .25s, opacity .25s, filter .25s; min-width:0; }
+  .card::before { content:""; position:absolute; inset:0 0 auto 0; height:4px; border-radius:12px 12px 0 0; background:var(--th); opacity:.7; }
+  .card:hover:not(:disabled) { transform:translateY(-6px) rotate(-0.6deg); box-shadow:0 10px 24px rgba(0,0,0,.45); }
+  .card.match { border-color:var(--th); box-shadow:0 0 0 1px var(--th), 0 0 22px -6px var(--th), 0 4px 12px rgba(0,0,0,.35); }
+  .card.match:hover:not(:disabled) { box-shadow:0 0 0 1px var(--th), 0 0 30px -4px var(--th), 0 10px 24px rgba(0,0,0,.45); }
+  .card.off { filter:saturate(.55) brightness(.85); }
+  .card.off:hover { filter:none; }
+  .card:disabled { cursor:default; }
+  .card .key { position:absolute; top:10px; right:10px; font-size:11px; color:var(--muted); border:1px solid var(--line); border-radius:5px; padding:0 5px; }
+  .card .title { font-family:var(--display); font-size:17px; line-height:1.15; padding-right:22px; }
+  .card .type { font-size:12px; color:var(--muted); display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .card .desc { font-size:14px; color:var(--soft); flex:1; }
+  .card .flav { font-size:12.5px; font-style:italic; color:var(--muted); }
+  .card .tag { font-size:12px; font-weight:700; border-radius:6px; padding:3px 7px; align-self:flex-start; }
+  .tag.good { background:rgba(75,225,160,.12); color:var(--success); border:1px solid rgba(75,225,160,.35); }
+  .tag.meh { background:rgba(242,192,102,.1); color:var(--gold); border:1px solid rgba(242,192,102,.3); }
+  .tag.bad { background:rgba(255,107,107,.1); color:#ff9a9a; border:1px solid rgba(255,107,107,.3); }
+
+  .card.drawn { animation:dealIn .5s cubic-bezier(.2,.9,.3,1.2) backwards; }
+  @keyframes dealIn { from { opacity:0; transform:translate(-60px, 30px) rotate(-12deg) scale(.8); } }
+  .card.playing { animation:castOut .42s ease-in forwards; pointer-events:none; }
+  @keyframes castOut { 0% { transform:translateY(-6px); } 35% { transform:translateY(-22px) scale(1.06); box-shadow:0 0 40px 4px var(--th); filter:brightness(1.4); } 100% { opacity:0; transform:translateY(-70px) scale(.7); } }
+
+  /* Lower row */
+  .lower { display:grid; grid-template-columns:200px 1fr 1.4fr; gap:12px; }
+  .lower > * { min-width:0; }
+  .pile { display:flex; flex-direction:column; gap:8px; }
+  .stack { position:relative; height:84px; width:64px; margin-top:4px; }
+  .stack i { position:absolute; inset:0; border-radius:8px; border:1px solid var(--line-2); background:repeating-linear-gradient(45deg, #143049 0 6px, #102436 6px 12px); }
+  .stack i:nth-child(2) { transform:translate(4px,-4px); } .stack i:nth-child(3) { transform:translate(8px,-8px); }
+  .stack .n { position:absolute; inset:0; display:grid; place-items:center; font-family:var(--display); font-size:22px; transform:translate(8px,-8px); }
+  .stack.empty i { opacity:.25; }
+  .disc-list { display:flex; flex-direction:column; gap:5px; }
+  .disc-item { font-size:13px; display:flex; align-items:center; gap:6px; padding:5px 8px; border-radius:7px; background:var(--panel-2); border:1px solid var(--line); border-left:3px solid var(--th); }
+  .disc-item.new { animation:slideIn .4s ease; }
+  @keyframes slideIn { from { opacity:0; transform:translateY(-8px); } }
+  .muted { color:var(--muted); font-size:13px; }
+  .log { font-size:13.5px; background:var(--panel-2); border:1px dashed var(--line); padding:8px 10px; border-radius:8px; max-height:210px; overflow:auto; display:flex; flex-direction:column; gap:3px; }
+  .log div:first-child { animation:slideIn .3s ease; }
+  .you { color:var(--success); font-weight:600; } .storm { color:var(--danger); font-weight:600; }
+
+  /* Card index */
+  details.panel > summary { cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  details.panel > summary::-webkit-details-marker { display:none; }
+  details.panel > summary::after { content:"Show"; font-size:13px; color:var(--accent); }
+  details.panel[open] > summary::after { content:"Hide"; }
+  .catalog { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:10px; margin-top:12px; }
+  .catalog .card { cursor:default; }
+  .catalog .card:hover { transform:none; }
+  .rules { font-size:14px; color:var(--soft); max-width:70ch; margin-top:10px; display:flex; flex-direction:column; gap:6px; }
+  .rules p { margin:0; }
+  .rules b { color:var(--text); }
+
+  /* Storm effects */
+  #stormVeil { position:fixed; inset:0; pointer-events:none; background:radial-gradient(ellipse at center, transparent 40%, rgba(255,60,80,.35) 100%); opacity:0; transition:opacity .25s; z-index:20; }
+  #stormVeil.on { opacity:1; }
+  #stormBanner { position:fixed; left:50%; top:30%; transform:translate(-50%,-50%); font-family:var(--display); font-size:clamp(22px,5vw,36px); color:#ffd0d0; text-shadow:0 0 24px rgba(255,80,100,.8); pointer-events:none; opacity:0; z-index:21; text-align:center; width:90%; }
+  #stormBanner.show { animation:banner 1.3s ease forwards; }
+  @keyframes banner { 0% { opacity:0; transform:translate(-50%,-30%) scale(.9); } 20%,70% { opacity:1; transform:translate(-50%,-50%) scale(1); } 100% { opacity:0; transform:translate(-50%,-70%); } }
+  .shake { animation:shake .45s; }
+  @keyframes shake { 20% { transform:translateX(-6px); } 40% { transform:translateX(6px); } 60% { transform:translateX(-4px); } 80% { transform:translateX(3px); } }
+  body.storming .wrap { filter:hue-rotate(-12deg) saturate(1.1); transition:filter .4s; }
+
+  .toast { position:fixed; bottom:calc(16px + env(safe-area-inset-bottom, 0px)); left:50%; transform:translateX(-50%) translateY(20px); background:var(--panel-2); border:1px solid var(--line-2); color:var(--text); padding:10px 14px; border-radius:8px; font-size:14px; opacity:0; transition:all .25s; pointer-events:none; z-index:30; max-width:calc(100% - 32px); text-align:center; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* End screen */
+  [hidden] { display:none !important; }
+  #endScreen { position:fixed; inset:0; background:rgba(4,12,22,.78); backdrop-filter:blur(3px); display:grid; place-items:center; z-index:40; padding:16px; }
+  .end-card { background:var(--panel); border:1px solid var(--line-2); border-radius:16px; padding:28px 24px; text-align:center; max-width:420px; width:100%; display:flex; flex-direction:column; gap:12px; animation:rise .5s cubic-bezier(.2,.9,.3,1.2); }
+  @keyframes rise { from { opacity:0; transform:translateY(30px) scale(.95); } }
+  .end-card h2 { font-family:var(--display); font-weight:400; font-size:32px; margin:0; }
+  .end-card.win h2 { color:var(--gold); text-shadow:0 0 20px rgba(242,192,102,.5); }
+  .end-card.lose h2 { color:var(--danger); }
+  .end-card p { margin:0; color:var(--soft); }
+  .end-stats { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+
+  @media (max-width:820px) {
+    .lower { grid-template-columns:1fr 1fr; }
+    .lower .logbox { grid-column:1 / -1; }
+  }
+  @media (max-width:520px) {
+    .gauges { grid-template-columns:1fr; }
+    .tones { grid-template-columns:repeat(3, 1fr); }
+    .hand { grid-template-columns:1fr 1fr; gap:8px; }
+    .card { padding:10px; }
+    .card .title { font-size:15px; }
+    .card .desc { font-size:13px; }
+    .card .key { display:none; }
+    .card .flav { display:none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration:1ms !important; animation-iteration-count:1 !important; transition-duration:1ms !important; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="wrap" id="wrap">
+  <header>
+    <h1>Prophecy of the Listener<small>Relicsong Card Game. Align your tone, steady the paradox, and outsing the Resonance Storm.</small></h1>
+    <div class="head-btns">
+      <a class="btn" href="rules.html" style="text-decoration:none">Rules for beginners</a>
+      <button class="btn" id="soundBtn" type="button" aria-pressed="true">Sound: On</button>
+      <button class="btn" id="newGame" type="button">New Game</button>
+    </div>
+  </header>
+
+  <section class="gauges" aria-label="Game status">
+    <div class="gauge" id="gRes">
+      <div class="gauge-top"><span class="label">Your Resonance</span><span class="big"><span id="resonance">0</span><span class="of"> / 10 to win</span></span></div>
+      <div class="meter res"><i id="resBar"></i></div>
+      <div class="pills">
+        <span class="pill" id="pHealth">Health <strong id="health">10</strong></span>
+        <span class="pill" id="pShield">Shield <strong id="shield">0</strong></span>
+      </div>
+    </div>
+    <div class="gauge" id="gIns">
+      <div class="gauge-top"><span class="label">Storm Instability</span><span class="big"><span id="instability">0</span><span class="of"> / 10 you lose</span></span></div>
+      <div class="meter ins" id="insMeter"><i id="insBar"></i></div>
+      <div class="pills">
+        <span class="pill" id="pIntensity">Intensity <strong id="intensity">1</strong></span>
+        <span class="pill" id="pParadox">Paradox <strong id="paradox">0</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel tonebar" aria-label="Choose your tone">
+    <div class="tonebar-head">
+      <span class="label">Active Tone</span>
+      <span class="hint" id="toneHint">Cards that match your tone glow. Each number is how many cards in your hand match.</span>
+    </div>
+    <div class="tones" id="tones"></div>
+  </section>
+
+  <section class="panel" id="handPanel" aria-label="Your hand">
+    <div class="hand-head">
+      <div class="left">
+        <span class="label">Your Hand</span>
+        <span class="pips" id="pips" title="Plays left this turn"></span>
+        <span class="turn" id="turnInfo">Turn 1</span>
+      </div>
+      <button class="btn primary" id="endTurn" type="button">End Turn</button>
+    </div>
+    <div class="hand" id="hand"></div>
+  </section>
+
+  <section class="lower">
+    <div class="panel pile">
+      <span class="label">Draw Pile</span>
+      <div class="stack" id="drawStack"><i></i><i></i><i></i><span class="n" id="drawCount">0</span></div>
+      <span class="muted">Discard reshuffles in when this runs out.</span>
+    </div>
+    <div class="panel pile">
+      <span class="label">Discard <span id="discCount"></span></span>
+      <div class="disc-list" id="discard"></div>
+    </div>
+    <div class="panel pile logbox">
+      <span class="label">Event Log</span>
+      <div class="log" id="log" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <details class="panel" id="indexPanel">
+    <summary><span class="label">How to play and card index</span></summary>
+    <div class="rules">
+      <p><b>Goal:</b> reach 10 Resonance before Storm Instability reaches 10 or your Health hits 0.</p>
+      <p><b>Each turn</b> you can play up to 3 cards. Click a card to play it, or press keys 1 to 7. Then press End Turn (or E), and the Storm acts.</p>
+      <p><b>Tone matters.</b> Pick a tone with the buttons above. Playing a card that matches your tone gives +1 extra on any Resonance it grants, as long as Paradox is 0. Playing a card that does not match costs 1 Resonance.</p>
+      <p><b>The Storm</b> can raise Instability, add Paradox, hit you for 2 (Shield absorbs it first), or grow stronger. At Intensity 2 or more it acts twice a turn.</p>
+    </div>
+    <div class="catalog" id="catalog"></div>
+  </details>
+</div>
+
+<div id="stormVeil"></div>
+<div id="stormBanner"></div>
+<div id="toast" class="toast" role="status"></div>
+<div id="endScreen" hidden></div>
+
+<script>
+(function(){
+  const $ = (id)=> document.getElementById(id);
+  const sleep = (ms)=> new Promise(r=> setTimeout(r, reduced() ? Math.min(ms, 120) : ms));
+  const reduced = ()=> window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const TONES = ["Calm","Empathetic","Reflective","Curious","Vulnerable"];
+  const TONE_PITCH = { Calm:392, Empathetic:440, Reflective:494, Curious:587, Vulnerable:659 };
+
+  // ---------- Card definitions (same cards and rules as the original) ----------
+  const DEFS = {
+    "Breath of Tide":          { type:"Verse", tone:"Calm",       copies:3, text:"Stabilize a paradox surge. Gain +2 Resonance.", flavor:"The sea inhales, and time steadies.", play:()=> addResonance(2) },
+    "Pulse of Crystal":        { type:"Verse", tone:"Empathetic", copies:3, text:"Align resonance. Gain 2 Shield.", flavor:"A heartbeat in glass, empathy refracted.", play:()=> addShield(2) },
+    "Drift of Memory":         { type:"Verse", tone:"Reflective", copies:3, text:"Reveal a forgotten truth. Gain +1 Resonance and draw 1.", flavor:"You remember what never happened.", play:()=> { addResonance(1); drawCards(1); } },
+    "Bloom of Light":          { type:"Verse", tone:"Curious",    copies:3, text:"Illuminate hidden glyphs. Draw 2 cards.", flavor:"Curiosity becomes lanterns in the deep.", play:()=> drawCards(2) },
+    "Listener’s Echo":         { type:"Verse", tone:"Vulnerable", copies:3, text:"Cross-species communion. Reduce Instability by 2.", flavor:"A word made of light, heard by the ocean.", play:()=> reduceInstability(2) },
+    "Breath-Shell":            { type:"Relic", tone:"Calm",       copies:1, text:"Cancel a paradox. Gain +1 Resonance and +1 Shield.", flavor:"A conch that sings calm into storms.", play:()=> { addResonance(1); addShield(1); adjustParadox(-1); } },
+    "Crystal Mask Fragment":   { type:"Relic", tone:"Empathetic", copies:1, text:"+2 to alignment. Gain +2 Shield.", flavor:"A shard of Tharen’s ascension.", play:()=> { addShield(2); log("Your mask hums with light.", "you"); } },
+    "Drift-Spiral Charm":      { type:"Relic", tone:"Reflective", copies:1, text:"Recall a truth. Draw 2.", flavor:"A curl of memory that catches echoes.", play:()=> drawCards(2) },
+    "Tide-Bloom Pendant":      { type:"Relic", tone:"Curious",    copies:1, text:"Reveal secrets. Gain +1 Resonance and draw 1.", flavor:"A flower from the tide that glows with secrets.", play:()=> { addResonance(1); drawCards(1); } },
+    "Listener’s Archive Shard":{ type:"Relic", tone:"Vulnerable", copies:1, text:"Stabilize the world. Reduce Instability by 3.", flavor:"A sliver of the sea’s own memory.", play:()=> reduceInstability(3) },
+    "Echo Reversal":           { type:"Echo",  tone:"Reflective", copies:1, text:"Swap your tone with the Storm’s intensity. Then draw 1.", flavor:"The spiral turns back upon itself.", play:()=> { setTone(toneFromIntensity(S.intensity), true); drawCards(1); log("Echo Reversal shifts your resonance.", "you"); } },
+    "Glyph Cascade":           { type:"Echo",  tone:"Curious",    copies:1, text:"Random verse triggers. Then take 1 Paradox.", flavor:"Runes tumble like rain.", play:()=> { randomVerse(); adjustParadox(1); } },
+    "Resonance Surge":         { type:"Event", tone:"Empathetic", copies:1, text:"Gain +3 Resonance. Take 1 damage.", flavor:"Your song cracks the sky.", play:()=> { addResonance(3); damagePlayer(1); } },
+    "Calm the Tempest":        { type:"Event", tone:"Calm",       copies:1, text:"Reduce Instability by 4. End your turn.", flavor:"You speak and the storm sits.", play:()=> { reduceInstability(4); S.endAfterPlay = true; } }
+  };
+  const VERSE_NAMES = Object.keys(DEFS).filter(n=> DEFS[n].type==="Verse");
+
+  // ---------- State (plain data so it survives page updates) ----------
+  let S = null;
+  let nextId = 1;
+  let busy = false;
+  let fresh = new Set();      // card ids just drawn, for the deal-in animation
+  let freshDiscard = false;
+
+  function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  function starterDeck(){
+    const deck = [];
+    Object.entries(DEFS).forEach(([name,d])=>{ for(let i=0;i<d.copies;i++) deck.push({ id:nextId++, name }); });
+    return shuffle(deck);
+  }
+  function freshState(){
+    return { resonance:0, health:10, shield:0, instability:0, paradox:0, tone:"Calm",
+      hand:[], discard:[], draw:starterDeck(), playsLeft:3, turn:1, intensity:1,
+      over:null, current:null, endAfterPlay:false, log:[] };
+  }
+
+  // ---------- Sound ----------
+  let soundOn = true, actx = null;
+  try { soundOn = localStorage.getItem("relicsong-sound") !== "off"; } catch(e){}
+  function ac(){ if(!soundOn) return null; try { actx = actx || new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==="suspended") actx.resume(); return actx; } catch(e){ return null; } }
+  function tone(freq, dur=0.25, type="sine", vol=0.12, delay=0, slideTo=null){
+    const a = ac(); if(!a) return;
+    const t = a.currentTime + delay, o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t+dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t+0.02); g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t+dur+0.05);
+  }
+  const sfx = {
+    play:(t)=>{ const f=TONE_PITCH[t]||440; tone(f,.35,"triangle",.12); tone(f*1.5,.4,"sine",.06,.06); },
+    off:()=>{ tone(300,.25,"sawtooth",.05,0,220); },
+    draw:()=> tone(880,.06,"square",.025),
+    gain:()=>{ tone(660,.15,"sine",.08); tone(990,.2,"sine",.06,.08); },
+    shield:()=> tone(520,.3,"triangle",.07,0,780),
+    storm:()=>{ tone(90,.6,"sawtooth",.09,0,55); tone(130,.5,"square",.03,.05,70); },
+    hit:()=>{ tone(160,.25,"square",.08,0,80); },
+    tone:(t)=> tone(TONE_PITCH[t]||440,.18,"sine",.07),
+    win:()=> [523,659,784,1047].forEach((f,i)=> tone(f,.5,"triangle",.1,i*.12)),
+    lose:()=> [392,330,262,196].forEach((f,i)=> tone(f,.55,"sawtooth",.05,i*.16)),
+    nope:()=> tone(200,.12,"square",.04)
+  };
+
+  // ---------- Feedback helpers ----------
+  function log(msg, who="you"){
+    S.log.unshift({ msg, who }); if(S.log.length>80) S.log.pop();
+    renderLog();
+  }
+  let toastTimer;
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastTimer); toastTimer = setTimeout(()=> t.classList.remove("show"), 1800);
+  }
+  function floatText(anchorId, text, kind){
+    const host = $(anchorId); if(!host) return;
+    const f = document.createElement("span");
+    f.className = "float " + kind; f.textContent = text;
+    f.style.right = (10 + Math.random()*30) + "px"; f.style.top = "4px";
+    host.appendChild(f); setTimeout(()=> f.remove(), 1200);
+  }
+  function bump(id){ const el=$(id); if(!el) return; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
+  function shakeEl(el){ el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); }
+
+  // ---------- Core mechanics ----------
+  function synergyBonus(){
+    // +1 when the card being played matches your active tone and Paradox is 0
+    const d = S.current && DEFS[S.current];
+    return (d && d.tone===S.tone && S.paradox===0) ? 1 : 0;
+  }
+  function addResonance(n){
+    const bonus = synergyBonus(), gain = n + bonus;
+    S.resonance += gain;
+    log(`Resonance +${gain}${bonus ? " (tone bonus +1)" : ""}.`, "you");
+    floatText("gRes", `+${gain} Resonance`, "good"); bump("resonance"); sfx.gain();
+    checkEnd();
+  }
+  function addShield(n){ S.shield += n; log(`Shield +${n}.`, "you"); floatText("gRes", `+${n} Shield`, "blue"); bump("pShield"); sfx.shield(); }
+  function reduceInstability(n){
+    const before = S.instability; S.instability = Math.max(0, S.instability - n);
+    log(`Instability -${n}.`, "you"); if(before>0) { floatText("gIns", `-${before - S.instability} Instability`, "good"); bump("instability"); }
+  }
+  function adjustParadox(n){
+    const before = S.paradox; S.paradox = Math.max(0, S.paradox + n);
+    if(S.paradox===before) return;
+    log(`${n>0?"+":""}${n} Paradox.`, n>0 ? "storm" : "you");
+    floatText("gIns", `${n>0?"+":""}${n} Paradox`, n>0 ? "bad" : "good"); bump("pParadox");
+  }
+  function damagePlayer(n){
+    const absorb = Math.min(S.shield, n); S.shield -= absorb;
+    const dmg = n - absorb; S.health -= dmg;
+    log(`You take ${dmg} damage (absorbed ${absorb}).`, "storm");
+    if(absorb) { floatText("gRes", `Shield blocks ${absorb}`, "blue"); bump("pShield"); }
+    if(dmg) { floatText("gRes", `-${dmg} Health`, "bad"); bump("pHealth"); shakeEl($("wrap")); sfx.hit(); }
+    checkEnd();
+  }
+  function drawCards(n){
+    for(let i=0;i<n;i++){
+      if(S.draw.length===0 && S.discard.length){
+        S.draw = shuffle(S.discard.splice(0));
+        log("Your discard reshuffles into your draw.", "you");
+      }
+      if(S.draw.length===0) return;
+      const c = S.draw.shift(); S.hand.push(c); fresh.add(c.id);
+    }
+    sfx.draw();
+  }
+  function toneFromIntensity(int){ return TONES[(int-1) % TONES.length]; }
+  function setTone(t, silent){
+    if(S.tone===t) return; S.tone = t;
+    if(!silent) { toast("Tone set: " + t); sfx.tone(t); }
+    render();
+  }
+  function randomVerse(){
+    const pick = VERSE_NAMES[Math.floor(Math.random()*VERSE_NAMES.length)];
+    log(`Glyph Cascade triggers ${pick}.`, "you");
+    toast("Glyph Cascade: " + pick);
+    DEFS[pick].play();
+  }
+
+  async function playCard(id, el){
+    if(S.over || busy) return;
+    if(S.playsLeft<=0){ toast("No plays left. Press End Turn."); sfx.nope(); shakeEl($("pips")); $("endTurn").classList.add("pulse"); return; }
+    const idx = S.hand.findIndex(c=> c.id===id); if(idx<0) return;
+    busy = true;
+    const card = S.hand[idx], d = DEFS[card.name];
+    if(el){ el.classList.add("playing"); }
+    if(d.tone===S.tone) sfx.play(d.tone); else sfx.off();
+    await sleep(380);
+    S.hand.splice(idx,1);
+    S.playsLeft--;
+    log(`You play ${card.name}.`, "you");
+    if(d.tone !== S.tone){
+      const lost = Math.min(1, S.resonance);
+      S.resonance -= lost;
+      log(`Tone mismatch: ${S.tone} vs ${d.tone}.${lost ? " -1 Resonance." : ""}`, "storm");
+      if(lost) floatText("gRes", "-1 Off-tone", "bad");
+    } else {
+      log(`Tone aligned: ${d.tone}.`, "you");
+    }
+    S.current = card.name;
+    d.play();
+    S.current = null;
+    S.discard.push(card); freshDiscard = true;
+    checkEnd();
+    busy = false;
+    render();
+    if(S.endAfterPlay && !S.over){ S.endAfterPlay = false; await endTurn(true); }
+  }
+
+  async function endTurn(calmed=false){
+    if(S.over || busy) return;
+    busy = true; $("endTurn").classList.remove("pulse"); render();
+    S.playsLeft = 3;
+    if(S.paradox>0){ S.paradox--; log("Paradox fades by 1.", "you"); }
+    let guard = 0;
+    while(S.hand.length<5 && (S.draw.length || S.discard.length) && guard++<10) drawCards(1);
+    render();
+    if(calmed){
+      log("The storm sits still. It does not act this turn.", "you");
+      toast("The storm sits still.");
+    } else {
+      await stormTurn();
+    }
+    S.turn++;
+    busy = false;
+    render();
+  }
+
+  async function stormTurn(){
+    const acts = Math.min(2, S.intensity);
+    document.body.classList.add("storming");
+    $("stormVeil").classList.add("on");
+    const b = $("stormBanner"); b.textContent = "The Resonance Storm churns…"; b.classList.remove("show"); void b.offsetWidth; b.classList.add("show");
+    sfx.storm();
+    log("The Resonance Storm churns...", "storm");
+    await sleep(900);
+    for(let i=0;i<acts && !S.over;i++){
+      const roll = Math.floor(Math.random()*4);
+      switch(roll){
+        case 0: S.instability += 2; log("Instability +2.", "storm"); floatText("gIns","+2 Instability","bad"); bump("instability"); shakeEl($("gIns")); sfx.hit(); break;
+        case 1: S.paradox += 1; log("Paradox +1.", "storm"); floatText("gIns","+1 Paradox","bad"); bump("pParadox"); sfx.hit(); break;
+        case 2: damagePlayer(2); shakeEl($("gRes")); break;
+        case 3: S.intensity += 1; log("Storm intensity rises!", "storm"); floatText("gIns","Intensity up!","info"); bump("pIntensity"); sfx.storm(); break;
+      }
+      checkEnd(); render();
+      await sleep(750);
+    }
+    document.body.classList.remove("storming");
+    $("stormVeil").classList.remove("on");
+  }
+
+  function checkEnd(){
+    if(S.over) return;
+    if(S.resonance>=10){ S.over = "win"; log("Victory: The ocean remembers you.", "you"); }
+    else if(S.instability>=10 || S.health<=0){ S.over = "lose"; log("Defeat: Memory fractures across Rahdaria.", "storm"); }
+    if(S.over) setTimeout(showEnd, 500);
+  }
+  function showEnd(){
+    if(!S.over) return;
+    const win = S.over==="win", es = $("endScreen");
+    const why = win ? "You harmonized the tide." : (S.health<=0 ? "Your Health ran out." : "Instability reached 10.");
+    es.innerHTML = `<div class="end-card ${win?"win":"lose"}" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+      <h2 id="endTitle">${win ? "Victory" : "Defeat"}</h2>
+      <p>${why} ${win ? "The ocean remembers you." : "Memory fractures across Rahdaria."}</p>
+      <div class="end-stats"><span class="pill">Turn <strong>${S.turn}</strong></span><span class="pill">Resonance <strong>${S.resonance}</strong></span><span class="pill">Health <strong>${Math.max(0,S.health)}</strong></span><span class="pill">Instability <strong>${S.instability}</strong></span></div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn primary" id="againBtn" type="button">Play again</button><button class="btn" id="viewBtn" type="button">Look at the board</button></div>
+    </div>`;
+    es.hidden = false;
+    (win ? sfx.win : sfx.lose)();
+    $("againBtn").onclick = ()=> { es.hidden = true; newGame(); };
+    $("viewBtn").onclick = ()=> { es.hidden = true; };
+    $("againBtn").focus();
+  }
+
+  // ---------- Rendering ----------
+  function previewTag(d){
+    const gainsRes = /Resonance/.test(d.text) && !/Swap/.test(d.text);
+    if(d.tone===S.tone){
+      if(gainsRes && S.paradox>0) return `<span class="tag meh">Matches tone (Paradox blocks bonus)</span>`;
+      if(gainsRes) return `<span class="tag good">Matches tone: +1 bonus</span>`;
+      return `<span class="tag good">Matches tone</span>`;
+    }
+    return `<span class="tag bad">Off-tone: costs 1 Resonance</span>`;
+  }
+  function cardHTML(name, opts={}){
+    const d = DEFS[name];
+    return `${opts.key ? `<span class="key">${opts.key}</span>` : ""}
+      <div class="title">${name}</div>
+      <div class="type">${d.type} <span class="tone" data-tone="${d.tone}">${d.tone}</span>${opts.copies ? ` <span>× ${d.copies} in deck</span>` : ""}</div>
+      <div class="desc">${d.text}</div>
+      <div class="flav">${d.flavor}</div>
+      ${opts.tag || ""}`;
+  }
+  function render(){
+    $("resonance").textContent = S.resonance;
+    $("health").textContent = Math.max(0, S.health);
+    $("shield").textContent = S.shield;
+    $("instability").textContent = S.instability;
+    $("intensity").textContent = S.intensity;
+    $("paradox").textContent = S.paradox;
+    $("resBar").style.width = Math.min(100, S.resonance*10) + "%";
+    $("insBar").style.width = Math.min(100, S.instability*10) + "%";
+    $("insMeter").classList.toggle("hot", S.instability>=7);
+    $("pHealth").classList.toggle("warn", S.health<=3);
+    $("pParadox").classList.toggle("warn", S.paradox>0);
+    $("turnInfo").textContent = `Turn ${S.turn}`;
+    const locked = !!S.over || busy;
+    $("endTurn").disabled = locked;
+    if(S.playsLeft>0) $("endTurn").classList.remove("pulse");
+    else if(!locked) $("endTurn").classList.add("pulse");
+
+    // pips
+    $("pips").innerHTML = [0,1,2].map(i=> `<span class="pip ${i<S.playsLeft?"":"used"}"></span>`).join("");
+    $("pips").setAttribute("aria-label", `${S.playsLeft} plays left`);
+
+    // tone dial
+    const counts = Object.fromEntries(TONES.map(t=> [t, S.hand.filter(c=> DEFS[c.name].tone===t).length]));
+    $("tones").innerHTML = "";
+    TONES.forEach(t=>{
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "tone-btn"; b.dataset.tone = t;
+      b.setAttribute("aria-pressed", String(S.tone===t)); b.disabled = locked;
+      b.innerHTML = `<span class="tn">${t}</span><span class="tc">${counts[t]} in hand</span>`;
+      b.onclick = ()=> setTone(t);
+      $("tones").appendChild(b);
+    });
+    $("toneHint").textContent = S.paradox>0
+      ? "Paradox is above 0, so matching cards get no bonus right now. Off-tone cards still cost 1."
+      : "Matching cards glow and get +1 on Resonance gains. The number shows how many you hold.";
+
+    // hand
+    const hand = $("hand"); hand.innerHTML = "";
+    if(!S.hand.length) hand.innerHTML = `<div class="empty-hand">No cards in hand. Press End Turn to draw.</div>`;
+    let delay = 0;
+    S.hand.forEach((c, i)=>{
+      const d = DEFS[c.name];
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "card " + (d.tone===S.tone ? "match" : "off");
+      el.dataset.tone = d.tone;
+      el.disabled = locked;
+      el.setAttribute("aria-label", `Play ${c.name}, ${d.tone} ${d.type}. ${d.text}`);
+      el.innerHTML = cardHTML(c.name, { key: i<9 ? String(i+1) : "", tag: previewTag(d) });
+      if(fresh.has(c.id)){ el.classList.add("drawn"); el.style.animationDelay = (delay++ * 90) + "ms"; }
+      el.onclick = ()=> playCard(c.id, el);
+      hand.appendChild(el);
+    });
+    fresh.clear();
+
+    // piles
+    $("drawCount").textContent = S.draw.length;
+    $("drawStack").classList.toggle("empty", S.draw.length===0);
+    $("discCount").textContent = S.discard.length ? `(${S.discard.length})` : "";
+    const disc = $("discard");
+    const recent = S.discard.slice(-5).reverse();
+    disc.innerHTML = recent.length ? recent.map((c,i)=> `<div class="disc-item ${i===0 && freshDiscard ? "new" : ""}" data-tone="${DEFS[c.name].tone}">${c.name}</div>`).join("") : `<span class="muted">Nothing played yet.</span>`;
+    freshDiscard = false;
+    renderLog();
+  }
+  function renderLog(){
+    $("log").innerHTML = S.log.slice(0,60).map(e=> `<div><span class="${e.who}">[${e.who==="you"?"You":"Storm"}]</span> ${e.msg}</div>`).join("");
+  }
+  function renderCatalog(){
+    $("catalog").innerHTML = Object.keys(DEFS).map(n=> `<div class="card" data-tone="${DEFS[n].tone}">${cardHTML(n,{copies:true})}</div>`).join("");
+  }
+
+  // ---------- Controls ----------
+  function newGame(){
+    S = freshState(); busy = false; fresh.clear();
+    $("endScreen").hidden = true;
+    log("A new tide begins.", "you");
+    drawCards(5);
+    render();
+  }
+  $("newGame").onclick = newGame;
+  $("endTurn").onclick = ()=> endTurn(false);
+  function syncSoundBtn(){ $("soundBtn").textContent = "Sound: " + (soundOn ? "On" : "Off"); $("soundBtn").setAttribute("aria-pressed", String(soundOn)); }
+  $("soundBtn").onclick = ()=>{ soundOn = !soundOn; try { localStorage.setItem("relicsong-sound", soundOn ? "on" : "off"); } catch(e){} syncSoundBtn(); if(soundOn) sfx.tone(S.tone); };
+  document.addEventListener("keydown", (e)=>{
+    if(e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(!$("endScreen").hidden) return;
+    if(/^[1-9]$/.test(e.key)){
+      const i = +e.key - 1, c = S.hand[i]; if(!c) return;
+      const el = $("hand").children[i]; playCard(c.id, el);
+    } else if(e.key==="e" || e.key==="E"){ endTurn(false); }
+  });
+
+  // ---------- Boot (keeps an in-progress game across page updates) ----------
+  window.claude?.hot?.snapshot?.(()=> ({ S, nextId }));
+  function start(data){
+    syncSoundBtn(); renderCatalog();
+    if(data && data.S && Array.isArray(data.S.hand)){
+      S = data.S; nextId = data.nextId || 1000; render();
+      if(S.over) showEnd();
+    } else {
+      newGame();
+      toast("Your opening hand is dealt. Pick a tone, then click a card.");
+    }
+  }
+  window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+})();
+</script>
+
+</body>
+</html>

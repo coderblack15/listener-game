@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Relicsong Rules for Beginners</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+  /* Layout: one readable column in the game's deep-sea palette. Sections follow the order a new player meets things. */
+  :root {
+    color-scheme: dark;
+    --bg:#0b1b2b; --panel:#12263a; --panel-2:#0f2133; --line:#1d3851; --line-2:#245276;
+    --accent:#35b6ff; --gold:#f2c066; --text:#e7f4ff; --muted:#8fb3c9; --soft:#cfe3f5;
+    --danger:#ff6b6b; --success:#4be1a0;
+    --display:"Marcellus", "Palatino Linotype", Georgia, serif;
+    --body:"Source Sans 3", ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  html, body { background:var(--bg); color:var(--text); }
+  body { font-family:var(--body); font-size:17px; line-height:1.55; margin:0; }
+  .wrap { max-width:760px; margin:0 auto; padding-block:28px 56px; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); display:flex; flex-direction:column; gap:22px; }
+  h1, h2 { font-family:var(--display); font-weight:400; margin:0; text-wrap:balance; }
+  h1 { font-size:clamp(28px, 6vw, 40px); line-height:1.1; }
+  h2 { font-size:24px; color:var(--gold); }
+  p { margin:0; }
+  .lede { color:var(--soft); font-size:18px; }
+  .label { font-size:12px; letter-spacing:0.7px; text-transform:uppercase; color:var(--muted); }
+  section { display:flex; flex-direction:column; gap:12px; }
+  .panel { background:var(--panel); border:1px solid #1c3952; border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:10px; }
+  .goal { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .goal .panel { gap:6px; }
+  .goal .big { font-family:var(--display); font-size:30px; line-height:1; }
+  .win .big { color:var(--success); } .lose .big { color:var(--danger); }
+  ol.steps { margin:0; padding:0; list-style:none; counter-reset:s; display:flex; flex-direction:column; gap:10px; }
+  ol.steps li { counter-increment:s; display:grid; grid-template-columns:36px 1fr; gap:12px; align-items:start; background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:12px; }
+  ol.steps li::before { content:counter(s); font-family:var(--display); font-size:20px; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:#173a57; border:1px solid var(--line-2); color:var(--accent); }
+  ul.plain { margin:0; padding-left:20px; display:flex; flex-direction:column; gap:6px; }
+  b { color:var(--text); }
+  .good { color:var(--success); font-weight:700; } .bad { color:#ff9a9a; font-weight:700; }
+  .tones { display:flex; flex-wrap:wrap; gap:8px; }
+  .tone { display:inline-block; padding:2px 10px; border-radius:999px; font-size:14px; border:1px solid #2b4b66; color:#d8e9f8; }
+  .Calm { background:#17485a; } .Empathetic { background:#3b3e75; } .Reflective { background:#2a4b6e; } .Curious { background:#2f516a; } .Vulnerable { background:#4b3552; }
+  .example { border-left:3px solid var(--accent); background:var(--panel-2); border-radius:0 10px 10px 0; padding:12px 14px; color:var(--soft); }
+  .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; min-width:520px; }
+  th, td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { background:var(--panel-2); color:var(--muted); font-weight:600; font-size:13px; letter-spacing:0.4px; }
+  tr:last-child td { border-bottom:none; }
+  td.n { white-space:nowrap; font-weight:600; }
+  dl { margin:0; display:grid; grid-template-columns:max-content 1fr; gap:8px 16px; }
+  dt { font-weight:700; } dd { margin:0; color:var(--soft); }
+  .cta { display:inline-block; align-self:flex-start; background:linear-gradient(180deg,#2a6a98,#1a4a70); border:1px solid #3d86ba; color:var(--text); text-decoration:none; font-weight:700; padding:10px 18px; border-radius:9px; }
+  .cta:hover { filter:brightness(1.15); }
+  .cta:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  @media (max-width:520px) {
+    .goal { grid-template-columns:1fr; }
+    dl { grid-template-columns:1fr; gap:2px 0; }
+    dd { margin-bottom:8px; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <span class="label">Prophecy of the Listener · Relicsong Card Game</span>
+    <h1>How to Play</h1>
+    <p class="lede">A short guide for your first game. You can learn it in five minutes.</p>
+    <a class="cta" href="index.html">Open the game</a>
+  </header>
+
+  <section>
+    <h2>The goal</h2>
+    <p>You are the Listener, singing against the Resonance Storm. It is a race.</p>
+    <div class="goal">
+      <div class="panel win"><span class="label">You win when</span><span class="big">10 Resonance</span><p>Your song is strong enough to calm the sea.</p></div>
+      <div class="panel lose"><span class="label">You lose when</span><span class="big">10 Instability</span><p>Or when your Health drops to 0.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Your numbers</h2>
+    <dl class="panel">
+      <dt>Resonance</dt><dd>Your score. Get it to 10 to win.</dd>
+      <dt>Health</dt><dd>You start with 10. If it reaches 0, you lose.</dd>
+      <dt>Shield</dt><dd>Blocks damage before it hurts your Health. 1 Shield stops 1 damage.</dd>
+      <dt>Instability</dt><dd>How wild the Storm is. If it reaches 10, you lose.</dd>
+      <dt>Paradox</dt><dd>A bad thing. While it is above 0, matching your tone gives no bonus. It drops by 1 at the end of each of your turns.</dd>
+      <dt>Intensity</dt><dd>How strong the Storm is. Once it is 2 or more, the Storm acts twice each turn.</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Your turn, step by step</h2>
+    <ol class="steps">
+      <li><div><b>Pick a tone.</b> Tap one of the five tone buttons. Cards in your hand that match it will glow.</div></li>
+      <li><div><b>Play up to 3 cards.</b> Tap a card to play it. The three dots show how many plays you have left. You don't have to use all three.</div></li>
+      <li><div><b>Press End Turn.</b> Your hand fills back up to 5 cards and Paradox drops by 1.</div></li>
+      <li><div><b>The Storm takes its turn.</b> It does something bad (see below). Then it's your turn again.</div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Tones: the one trick to learn</h2>
+    <p>Every card has a tone. You have one active tone at a time, and you can change it whenever you like, for free.</p>
+    <div class="tones"><span class="tone Calm">Calm</span><span class="tone Empathetic">Empathetic</span><span class="tone Reflective">Reflective</span><span class="tone Curious">Curious</span><span class="tone Vulnerable">Vulnerable</span></div>
+    <ul class="plain">
+      <li>Play a card that <span class="good">matches</span> your tone, and any Resonance it gives you gets <span class="good">+1 extra</span>. This only works when Paradox is 0.</li>
+      <li>Play a card that <span class="bad">does not match</span>, and you <span class="bad">lose 1 Resonance</span>.</li>
+    </ul>
+    <div class="example"><b>Example.</b> Your tone is Calm and you play Breath of Tide, which is a Calm card that gives 2 Resonance. It matches, so you get 3. If your tone had been Curious, you would get 2 and then lose 1, so only 1.</div>
+    <p><b>Simple habit:</b> before you tap a card, set your tone to that card's tone. Each card tells you if it matches.</p>
+  </section>
+
+  <section>
+    <h2>What the Storm does</h2>
+    <p>On its turn the Storm picks one of these at random. At Intensity 2 or more, it picks twice.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>The Storm…</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr><td class="n">Rages</td><td>Instability goes up by 2.</td></tr>
+        <tr><td class="n">Twists time</td><td>Paradox goes up by 1.</td></tr>
+        <tr><td class="n">Strikes you</td><td>2 damage. Shield blocks it first.</td></tr>
+        <tr><td class="n">Grows</td><td>Intensity goes up by 1.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>The cards</h2>
+    <p>Your deck has 24 cards. There are four kinds:</p>
+    <dl class="panel">
+      <dt>Verse</dt><dd>Your everyday songs. Simple and safe. There are 5 of them, and you have 3 copies of each.</dd>
+      <dt>Relic</dt><dd>Treasures with a bit more power, often doing two things at once. One copy each.</dd>
+      <dt>Echo</dt><dd>Tricky cards that bend the rules, like changing your tone or setting off a random Verse. One copy each.</dd>
+      <dt>Event</dt><dd>Big, risky moves. Strong, but they come with a cost. One copy each.</dd>
+    </dl>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Card</th><th>Tone</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td class="n">Breath of Tide</td><td><span class="tone Calm">Calm</span></td><td>+2 Resonance</td></tr>
+        <tr><td class="n">Pulse of Crystal</td><td><span class="tone Empathetic">Empathetic</span></td><td>+2 Shield</td></tr>
+        <tr><td class="n">Drift of Memory</td><td><span class="tone Reflective">Reflective</span></td><td>+1 Resonance, draw 1 card</td></tr>
+        <tr><td class="n">Bloom of Light</td><td><span class="tone Curious">Curious</span></td><td>Draw 2 cards</td></tr>
+        <tr><td class="n">Listener’s Echo</td><td><span class="tone Vulnerable">Vulnerable</span></td><td>Instability −2</td></tr>
+        <tr><td class="n">Breath-Shell</td><td><span class="tone Calm">Calm</span></td><td>+1 Resonance, +1 Shield, Paradox −1</td></tr>
+        <tr><td class="n">Crystal Mask Fragment</td><td><span class="tone Empathetic">Empathetic</span></td><td>+2 Shield</td></tr>
+        <tr><td class="n">Drift-Spiral Charm</td><td><span class="tone Reflective">Reflective</span></td><td>Draw 2 cards</td></tr>
+        <tr><td class="n">Tide-Bloom Pendant</td><td><span class="tone Curious">Curious</span></td><td>+1 Resonance, draw 1 card</td></tr>
+        <tr><td class="n">Listener’s Archive Shard</td><td><span class="tone Vulnerable">Vulnerable</span></td><td>Instability −3</td></tr>
+        <tr><td class="n">Echo Reversal</td><td><span class="tone Reflective">Reflective</span></td><td>Your tone changes to match the Storm’s Intensity, then draw 1 card</td></tr>
+        <tr><td class="n">Glyph Cascade</td><td><span class="tone Curious">Curious</span></td><td>A random Verse goes off for free, then Paradox +1</td></tr>
+        <tr><td class="n">Resonance Surge</td><td><span class="tone Empathetic">Empathetic</span></td><td>+3 Resonance, but you take 1 damage</td></tr>
+        <tr><td class="n">Calm the Tempest</td><td><span class="tone Calm">Calm</span></td><td>Instability −4, your turn ends, and the Storm skips its turn</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>How to win, step by step</h2>
+    <ol class="steps">
+      <li><div><b>Build Resonance every turn.</b> Breath of Tide, Drift of Memory, Tide-Bloom Pendant, Breath-Shell and Resonance Surge all add to it. Get to 10 and you win.</div></li>
+      <li><div><b>Match your tone first.</b> A matching card gives +1 extra Resonance. A card that doesn’t match costs you 1.</div></li>
+      <li><div><b>Keep the Storm in check.</b> When Instability climbs past 5, spend a play lowering it with Listener’s Echo, the Archive Shard or Calm the Tempest.</div></li>
+      <li><div><b>Protect your Health.</b> Use Shield cards when Health is getting low, so the Storm’s hits bounce off.</div></li>
+      <li><div><b>Draw when your hand is weak.</b> Bloom of Light and Drift-Spiral Charm bring in new cards to find what you need.</div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Tips for your first game</h2>
+    <ul class="plain">
+      <li>Always match your tone before you play. It is the easiest +1 in the game.</li>
+      <li>Keep an eye on Instability. If it reaches 6 or 7, play Listener’s Echo, the Archive Shard or Calm the Tempest.</li>
+      <li>Save Calm the Tempest for a bad moment. It also stops the Storm from acting that turn.</li>
+      <li>Play Pulse of Crystal early if your Health is low. Shield soaks up the Storm’s hits.</li>
+      <li>Try to keep Paradox at 0. Breath-Shell removes it; Glyph Cascade adds it.</li>
+    </ul>
+  </section>
+
+  <a class="cta" href="index.html">Start a game</a>
+</div>
+
+</body>
+</html>
