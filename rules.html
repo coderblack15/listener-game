@@ -24,6 +24,7 @@
   h1, h2 { font-family:var(--display); font-weight:400; margin:0; text-wrap:balance; }
   h1 { font-size:clamp(28px, 6vw, 40px); line-height:1.1; }
   h2 { font-size:24px; color:var(--gold); }
+  h2 .new { font-family:var(--body); font-size:11px; vertical-align:middle; }
   p { margin:0; }
   .lede { color:var(--soft); font-size:18px; }
   .label { font-size:12px; letter-spacing:0.7px; text-transform:uppercase; color:var(--muted); }
@@ -43,12 +44,14 @@
   .tone { display:inline-block; padding:2px 10px; border-radius:999px; font-size:14px; border:1px solid #2b4b66; color:#d8e9f8; }
   .Calm { background:#17485a; } .Empathetic { background:#3b3e75; } .Reflective { background:#2a4b6e; } .Curious { background:#2f516a; } .Vulnerable { background:#4b3552; }
   .example { border-left:3px solid var(--accent); background:var(--panel-2); border-radius:0 10px 10px 0; padding:12px 14px; color:var(--soft); }
+  .warn { border-left:3px solid var(--danger); background:#1f1a28; border-radius:0 10px 10px 0; padding:12px 14px; color:var(--soft); }
   .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
   table { border-collapse:collapse; width:100%; font-size:15px; min-width:520px; }
   th, td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
   th { background:var(--panel-2); color:var(--muted); font-weight:600; font-size:13px; letter-spacing:0.4px; }
   tr:last-child td { border-bottom:none; }
   td.n { white-space:nowrap; font-weight:600; }
+  .new { display:inline-block; margin-left:6px; font-size:11px; letter-spacing:.5px; text-transform:uppercase; color:var(--gold); border:1px solid rgba(242,192,102,.4); border-radius:5px; padding:0 5px; vertical-align:middle; }
   dl { margin:0; display:grid; grid-template-columns:max-content 1fr; gap:8px 16px; }
   dt { font-weight:700; } dd { margin:0; color:var(--soft); }
   .cta { display:inline-block; align-self:flex-start; background:linear-gradient(180deg,#2a6a98,#1a4a70); border:1px solid #3d86ba; color:var(--text); text-decoration:none; font-weight:700; padding:10px 18px; border-radius:9px; }
@@ -62,7 +65,6 @@
 </style>
 </head>
 <body>
-
 
 <div class="wrap">
   <header style="display:flex;flex-direction:column;gap:10px">
@@ -84,49 +86,104 @@
   <section>
     <h2>Your numbers</h2>
     <dl class="panel">
-      <dt>Resonance</dt><dd>Your score. Get it to 10 to win.</dd>
+      <dt>Resonance</dt><dd>Your progress. Get it to 10 to win.</dd>
       <dt>Health</dt><dd>You start with 10. If it reaches 0, you lose.</dd>
       <dt>Shield</dt><dd>Blocks damage before it hurts your Health. 1 Shield stops 1 damage.</dd>
       <dt>Instability</dt><dd>How wild the Storm is. If it reaches 10, you lose.</dd>
-      <dt>Paradox</dt><dd>A bad thing. While it is above 0, matching your tone gives no bonus. It drops by 1 at the end of each of your turns.</dd>
-      <dt>Intensity</dt><dd>How strong the Storm is. Once it is 2 or more, the Storm acts twice each turn.</dd>
+      <dt>Paradox</dt><dd>A bad thing. While it is above 0, matching your tone gives no bonus and you can't sing a Chorus. It drops by 1 at the end of each of your turns.</dd>
+      <dt>Intensity</dt><dd>How strong the Storm is. Once it is 2 or more, the Storm makes two moves each turn.</dd>
     </dl>
   </section>
 
   <section>
     <h2>Your turn, step by step</h2>
     <ol class="steps">
-      <li><div><b>Pick a tone.</b> Tap one of the five tone buttons. Cards in your hand that match it will glow.</div></li>
+      <li><div><b>Read the Storm's warning.</b> The red strip near the top shows exactly what the Storm will do when your turn ends, and which tone answers each move. Plan around it.</div></li>
+      <li><div><b>Pick a tone.</b> Tap one of the five tone buttons. Cards in your hand that match it will glow. Your first change each turn is free.</div></li>
       <li><div><b>Play up to 3 cards.</b> Tap a card to play it. The three dots show how many plays you have left. You don't have to use all three.</div></li>
+      <li><div><b>Hold a card if you like.</b> Once a turn, press Hold a card (or H) and pick one to save for later. Holding doesn't use a play.</div></li>
       <li><div><b>Press End Turn.</b> Your hand fills back up to 5 cards and Paradox drops by 1.</div></li>
-      <li><div><b>The Storm takes its turn.</b> It does something bad (see below). Then it's your turn again.</div></li>
+      <li><div><b>The Storm makes its moves.</b> It does what the warning said, minus anything you answered. Then it shows its next moves, and it's your turn again.</div></li>
     </ol>
   </section>
 
   <section>
     <h2>Tones: the one trick to learn</h2>
-    <p>Every card has a tone. You have one active tone at a time, and you can change it whenever you like, for free.</p>
+    <p>Every card has a tone. You have one active tone at a time.</p>
     <div class="tones"><span class="tone Calm">Calm</span><span class="tone Empathetic">Empathetic</span><span class="tone Reflective">Reflective</span><span class="tone Curious">Curious</span><span class="tone Vulnerable">Vulnerable</span></div>
     <ul class="plain">
       <li>Play a card that <span class="good">matches</span> your tone, and any Resonance it gives you gets <span class="good">+1 extra</span>. This only works when Paradox is 0.</li>
       <li>Play a card that <span class="bad">does not match</span>, and you <span class="bad">lose 1 Resonance</span>.</li>
+      <li>Your <span class="good">first tone change each turn is free</span>. Every <span class="bad">extra change costs 1 Resonance</span>. If you have no Resonance to pay, you take 1 Paradox instead.</li>
     </ul>
     <div class="example"><b>Example.</b> Your tone is Calm and you play Breath of Tide, which is a Calm card that gives 2 Resonance. It matches, so you get 3. If your tone had been Curious, you would get 2 and then lose 1, so only 1.</div>
-    <p><b>Simple habit:</b> before you tap a card, set your tone to that card's tone. Each card tells you if it matches.</p>
+    <p><b>Simple habit:</b> look at your hand, pick the tone that most of your best cards share, and stick with it for the turn. Switching back and forth will drain your Resonance.</p>
+  </section>
+
+  <section>
+    <h2>Counter-song <span class="new">New</span></h2>
+    <p>Each tone can answer one of the Storm's moves. When you play a card that <b>matches your tone</b> while that move is in the red strip, the move is softened. The chip turns green so you can see it worked.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Storm move</th><th>Answered by</th><th>What answering does</th></tr></thead>
+      <tbody>
+        <tr><td class="n">Strike</td><td><span class="tone Empathetic">Empathetic</span></td><td>Only 1 damage instead of 2</td></tr>
+        <tr><td class="n">Swell</td><td><span class="tone Vulnerable">Vulnerable</span></td><td>Only +1 Instability instead of +2</td></tr>
+        <tr><td class="n">Fracture</td><td><span class="tone Calm">Calm</span></td><td>Cancelled</td></tr>
+        <tr><td class="n">Discord</td><td><span class="tone Reflective">Reflective</span></td><td>Cancelled</td></tr>
+        <tr><td class="n">Drown</td><td><span class="tone Curious">Curious</span></td><td>Cancelled</td></tr>
+      </tbody>
+    </table></div>
+    <p>One card answers one move. Silence and Surge have no tone that answers them. A card in your hand that would answer a move shows an <b>Answers</b> tag.</p>
+  </section>
+
+  <section>
+    <h2>Chorus <span class="new">New</span></h2>
+    <p>Make <b>all 3 of your plays</b> in a turn match your tone while Paradox is 0, and you sing a Chorus. You then pick a reward: <span class="good">+1 Resonance</span> or <span class="good">−1 Instability</span>. The line next to your turn counter tracks how close you are.</p>
+    <div class="example"><b>Example.</b> Your tone is Empathetic. You play Pulse of Crystal, Crystal Mask Fragment and Resonance Surge. All three match, so you get a Chorus. The first one also answered a warned Strike.</div>
+  </section>
+
+  <section>
+    <h2>Attuned Relics <span class="new">New</span></h2>
+    <p>After you play a Relic, the game asks if you want to <b>attune</b> it. An attuned Relic sits in your Relic slot instead of going to the discard, and its passive effect works every turn. You have one slot, so attuning a new Relic sends the old one to your discard.</p>
+    <p>A <b>Fracture</b> shatters your attuned Relic. Answer Fractures with a Calm card to protect it.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Relic</th><th>While attuned</th></tr></thead>
+      <tbody>
+        <tr><td class="n">Breath-Shell</td><td>Each Strike deals 1 less damage.</td></tr>
+        <tr><td class="n">Crystal Mask Fragment</td><td>Gain 1 Shield at the start of each of your turns.</td></tr>
+        <tr><td class="n">Drift-Spiral Charm</td><td>Your hand fills to 6 cards instead of 5.</td></tr>
+        <tr><td class="n">Tide-Bloom Pendant</td><td>Your first off-tone play each turn costs no Resonance.</td></tr>
+        <tr><td class="n">Listener’s Archive Shard</td><td>The rising tide only comes in every other turn.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Held breath <span class="new">New</span></h2>
+    <p>Once per turn you can set one card aside in the <b>held breath</b> slot. Press Hold a card (or H), then tap the card. It stays there until you tap it to play it, on any later turn.</p>
+    <ul class="plain">
+      <li>Drown can't take a held card.</li>
+      <li>A held card doesn't count toward your 5-card hand, so you still draw back up to 5.</li>
+      <li>Playing it uses one of your plays, and the usual tone rules apply.</li>
+    </ul>
   </section>
 
   <section>
     <h2>What the Storm does</h2>
-    <p>On its turn the Storm picks one of these at random. At Intensity 2 or more, it picks twice.</p>
+    <p>The Storm always warns you first. Its next moves appear in the red strip before you play, so nothing it does is a surprise. At Intensity 2 or more, it makes two moves.</p>
     <div class="table-wrap"><table>
-      <thead><tr><th>The Storm…</th><th>What happens</th></tr></thead>
+      <thead><tr><th>Move</th><th>What happens</th><th>Answered by</th></tr></thead>
       <tbody>
-        <tr><td class="n">Rages</td><td>Instability goes up by 2.</td></tr>
-        <tr><td class="n">Twists time</td><td>Paradox goes up by 1.</td></tr>
-        <tr><td class="n">Strikes you</td><td>2 damage. Shield blocks it first.</td></tr>
-        <tr><td class="n">Grows</td><td>Intensity goes up by 1.</td></tr>
+        <tr><td class="n">Swell</td><td>Instability goes up by 2.</td><td><span class="tone Vulnerable">Vulnerable</span></td></tr>
+        <tr><td class="n">Strike</td><td>2 damage to you. Shield blocks it first.</td><td><span class="tone Empathetic">Empathetic</span></td></tr>
+        <tr><td class="n">Fracture</td><td>Paradox goes up by 1, and your attuned Relic shatters.</td><td><span class="tone Calm">Calm</span></td></tr>
+        <tr><td class="n">Surge</td><td>Intensity goes up by 1.</td><td>None</td></tr>
+        <tr><td class="n">Discord</td><td>Your tone is forced to a random different one. You'll likely spend next turn's free change fixing it.</td><td><span class="tone Reflective">Reflective</span></td></tr>
+        <tr><td class="n">Drown</td><td>A random card is swept from your hand into the discard pile.</td><td><span class="tone Curious">Curious</span></td></tr>
+        <tr><td class="n">Silence</td><td>You get only 2 plays next turn instead of 3.</td><td>None</td></tr>
       </tbody>
     </table></div>
+    <div class="warn"><b>Rising tide.</b> From turn 8 on, every Storm turn also adds 1 Instability, on top of its moves. The longer you play, the faster you lose. Push for the win before the tide comes in.</div>
   </section>
 
   <section>
@@ -134,7 +191,7 @@
     <p>Your deck has 24 cards. There are four kinds:</p>
     <dl class="panel">
       <dt>Verse</dt><dd>Your everyday songs. Simple and safe. There are 5 of them, and you have 3 copies of each.</dd>
-      <dt>Relic</dt><dd>Treasures with a bit more power, often doing two things at once. One copy each.</dd>
+      <dt>Relic</dt><dd>Treasures with a bit more power, often doing two things at once. You can attune them. One copy each.</dd>
       <dt>Echo</dt><dd>Tricky cards that bend the rules, like changing your tone or setting off a random Verse. One copy each.</dd>
       <dt>Event</dt><dd>Big, risky moves. Strong, but they come with a cost. One copy each.</dd>
     </dl>
@@ -151,10 +208,33 @@
         <tr><td class="n">Drift-Spiral Charm</td><td><span class="tone Reflective">Reflective</span></td><td>Draw 2 cards</td></tr>
         <tr><td class="n">Tide-Bloom Pendant</td><td><span class="tone Curious">Curious</span></td><td>+1 Resonance, draw 1 card</td></tr>
         <tr><td class="n">Listener’s Archive Shard</td><td><span class="tone Vulnerable">Vulnerable</span></td><td>Instability −3</td></tr>
-        <tr><td class="n">Echo Reversal</td><td><span class="tone Reflective">Reflective</span></td><td>Your tone changes to match the Storm’s Intensity, then draw 1 card</td></tr>
+        <tr><td class="n">Echo Reversal</td><td><span class="tone Reflective">Reflective</span></td><td>Your tone changes to match the Storm’s Intensity (this doesn't use your free change), then draw 1 card</td></tr>
         <tr><td class="n">Glyph Cascade</td><td><span class="tone Curious">Curious</span></td><td>A random Verse goes off for free, then Paradox +1</td></tr>
         <tr><td class="n">Resonance Surge</td><td><span class="tone Empathetic">Empathetic</span></td><td>+3 Resonance, but you take 1 damage</td></tr>
-        <tr><td class="n">Calm the Tempest</td><td><span class="tone Calm">Calm</span></td><td>Instability −4, your turn ends, and the Storm skips its turn</td></tr>
+        <tr><td class="n">Calm the Tempest</td><td><span class="tone Calm">Calm</span></td><td>Instability −4, your turn ends, and the Storm skips its turn (its warned moves wait for the next one)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Voyage across Rahdaria <span class="new">New</span></h2>
+    <p>Tap <b>Mode</b> at the top of the game to switch to a Voyage: three Storms in a row instead of one.</p>
+    <ul class="plain">
+      <li>After you calm a Storm, pick <b>1 of 3 new cards</b> to add to your deck for the rest of the Voyage.</li>
+      <li>Your Health carries over, plus 2 (never above your starting Health). Your held card comes with you. Resonance, Shield, Paradox and your Relic slot reset.</li>
+      <li>Each Storm starts wilder. Storm 2 begins with 1 extra Instability. Storm 3 begins with 2 extra and makes two moves from turn 1.</li>
+    </ul>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Reward card</th><th>Kind and tone</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td class="n">Whale-Song Verse</td><td>Verse · <span class="tone Vulnerable">Vulnerable</span></td><td>Instability −1, +1 Resonance</td></tr>
+        <tr><td class="n">Deepglass Verse</td><td>Verse · <span class="tone Reflective">Reflective</span></td><td>+1 Shield, draw 1 card</td></tr>
+        <tr><td class="n">Coral Lattice</td><td>Relic · <span class="tone Empathetic">Empathetic</span></td><td>+1 Resonance, +1 Shield. Attuned: each Chorus also gives 1 Shield.</td></tr>
+        <tr><td class="n">Tidewright’s Bell</td><td>Relic · <span class="tone Calm">Calm</span></td><td>Instability −2. Attuned: each Swell adds 1 less Instability.</td></tr>
+        <tr><td class="n">Lantern of Rahdaria</td><td>Relic · <span class="tone Curious">Curious</span></td><td>+1 Resonance, draw 1 card. Attuned: Silence has no effect on you.</td></tr>
+        <tr><td class="n">Mirror Tide</td><td>Echo · <span class="tone Empathetic">Empathetic</span></td><td>Answers the next warned Storm move, whatever it is, then draw 1 card</td></tr>
+        <tr><td class="n">Undertow Echo</td><td>Echo · <span class="tone Calm">Calm</span></td><td>Discard your hand, then draw that many cards plus 1</td></tr>
+        <tr><td class="n">Tharen’s Hymn</td><td>Event · <span class="tone Reflective">Reflective</span></td><td>+4 Resonance, but Instability +2</td></tr>
       </tbody>
     </table></div>
   </section>
@@ -163,26 +243,52 @@
     <h2>How to win, step by step</h2>
     <ol class="steps">
       <li><div><b>Build Resonance every turn.</b> Breath of Tide, Drift of Memory, Tide-Bloom Pendant, Breath-Shell and Resonance Surge all add to it. Get to 10 and you win.</div></li>
-      <li><div><b>Match your tone first.</b> A matching card gives +1 extra Resonance. A card that doesn’t match costs you 1.</div></li>
+      <li><div><b>Pick one tone and commit.</b> A matching card gives +1 extra Resonance, and three matching plays make a Chorus. A card that doesn’t match costs you 1, and so does every tone change after your first.</div></li>
+      <li><div><b>Answer the warning.</b> If a Strike is coming, play Shield or an Empathetic card. If a Swell is coming and Instability is already high, lower it now or answer it with a Vulnerable card.</div></li>
       <li><div><b>Keep the Storm in check.</b> When Instability climbs past 5, spend a play lowering it with Listener’s Echo, the Archive Shard or Calm the Tempest.</div></li>
-      <li><div><b>Protect your Health.</b> Use Shield cards when Health is getting low, so the Storm’s hits bounce off.</div></li>
-      <li><div><b>Draw when your hand is weak.</b> Bloom of Light and Drift-Spiral Charm bring in new cards to find what you need.</div></li>
+      <li><div><b>Finish before turn 8.</b> After that, the rising tide adds Instability every turn.</div></li>
     </ol>
+  </section>
+
+  <section>
+    <h2>Difficulty levels</h2>
+    <p>Tap the <b>Difficulty</b> button at the top of the game to pick a level. Picking one starts a new game, and the game remembers your choice. Everything in this guide describes Listener, the standard level.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Level</th><th>What changes</th><th>Score</th></tr></thead>
+      <tbody>
+        <tr><td class="n">Novice</td><td>12 Health. Two free tone changes a turn. The Storm never uses Drown or Silence. Rising tide from turn 10.</td><td class="n">×0.5</td></tr>
+        <tr><td class="n">Listener</td><td>The standard game. 10 Health, one free tone change, rising tide from turn 8.</td><td class="n">×1</td></tr>
+        <tr><td class="n">Abyss</td><td>8 Health. Instability starts at 2. The Storm makes two moves from turn 1. Rising tide from turn 7.</td><td class="n">×1.5</td></tr>
+        <tr><td class="n">Maelstrom</td><td>7 Health. Instability starts at 3. Two Storm moves from turn 1. No free tone change at all. Rising tide from turn 6.</td><td class="n">×2</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Scores and the leaderboard</h2>
+    <p>When a game ends, you get a score and can save it under any name you choose. The leaderboard shows the top 10, and each player keeps only their best.</p>
+    <dl class="panel">
+      <dt>A win</dt><dd>1000 points, plus 40 for every turn under 25, plus 25 for each Health and 10 for each Shield you have left.</dd>
+      <dt>A loss</dt><dd>50 points for each Resonance you reached, plus 10 for each turn you survived.</dd>
+      <dt>A Voyage</dt><dd>Each calmed Storm is worth 800, plus 30 for every turn under 15 in that Storm. Finishing all three adds 25 for each Health and 10 for each Shield left. If you fall, you keep the points for Storms already calmed, plus 50 per Resonance and 10 per turn survived.</dd>
+    </dl>
+    <p>The total is then multiplied by your difficulty, so a Maelstrom win counts double. Fast wins with Health to spare on hard levels score the most. Saving needs you to be signed in to Claude with permission to save on this game.</p>
   </section>
 
   <section>
     <h2>Tips for your first game</h2>
     <ul class="plain">
-      <li>Always match your tone before you play. It is the easiest +1 in the game.</li>
-      <li>Keep an eye on Instability. If it reaches 6 or 7, play Listener’s Echo, the Archive Shard or Calm the Tempest.</li>
-      <li>Save Calm the Tempest for a bad moment. It also stops the Storm from acting that turn.</li>
-      <li>Play Pulse of Crystal early if your Health is low. Shield soaks up the Storm’s hits.</li>
-      <li>Try to keep Paradox at 0. Breath-Shell removes it; Glyph Cascade adds it.</li>
+      <li>Read the red strip before every turn. It is the most useful thing on the screen, and it tells you which tone answers each move.</li>
+      <li>Treat your free tone change as precious. Discord will try to steal it, unless you answer it with a Reflective card.</li>
+      <li>When Drown is coming, play your best cards first or hold the one you can't lose.</li>
+      <li>When Silence is coming, make this turn count. Next turn you'll only have 2 plays.</li>
+      <li>Save Calm the Tempest for a bad moment, like two big moves coming at once.</li>
+      <li>Try to keep Paradox at 0. Breath-Shell removes it; Glyph Cascade and Fracture add it. Paradox also blocks your Chorus.</li>
+      <li>Attune a Relic early. Its effect pays off every turn it survives.</li>
     </ul>
   </section>
 
   <a class="cta" href="index.html">Start a game</a>
 </div>
-
 </body>
 </html>

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Source+Sans+3:wght@400;600;700&display=swap">
 <style>
-  /* Layout: one deep-sea table. Gauges on top, tone dial, the hand as the stage, piles + log beneath, card index folded away. */
+  /* Layout: one deep-sea table. Gauges on top, tone dial, the hand as the stage, piles + log beneath, leaderboard, card index folded away. */
   :root {
     color-scheme: dark;
     --bg:#0b1b2b; --bg-deep:#071321; --panel:#12263a; --panel-2:#0f2133; --line:#1d3851; --line-2:#245276;
@@ -64,6 +64,20 @@
   .float.good { color:var(--success); } .float.bad { color:var(--danger); } .float.info { color:var(--gold); } .float.blue { color:#9fe3ff; }
   @keyframes floatUp { 0% { opacity:0; transform:translateY(6px) scale(.8); } 15% { opacity:1; transform:translateY(0) scale(1.1); } 100% { opacity:0; transform:translateY(-38px) scale(1); } }
 
+  /* Storm intent */
+  .intent { display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap; border-color:#4a2a3a; background:linear-gradient(180deg, #1f2234, #161d2e); }
+  .intent .label { color:#e9a9b4; }
+  .intents { display:flex; gap:8px; flex-wrap:wrap; flex:1; }
+  .intent-chip { display:inline-flex; flex-direction:column; gap:1px; padding:6px 10px; border-radius:8px; background:#2a1724; border:1px solid #6b3346; min-width:0; }
+  .intent-chip b { font-size:14px; color:#ffd6dc; }
+  .intent-chip span { font-size:12.5px; color:#d9a8b2; }
+  .intent-chip.tide { background:#13283a; border-color:#2f6a92; }
+  .intent-chip.tide b { color:#bfe6ff; } .intent-chip.tide span { color:#8fc3e3; }
+  .intent-chip.calm { background:#14293a; border-color:var(--line-2); }
+  .intent-chip.calm b { color:var(--soft); } .intent-chip.calm span { color:var(--muted); }
+  .intent-chip.answered { background:#122d2a; border-color:#2f8a6a; }
+  .intent-chip.answered b { color:var(--success); text-decoration:line-through; text-decoration-color:rgba(75,225,160,.5); } .intent-chip.answered span { color:#9fd9bf; }
+
   /* Tone dial */
   .tonebar { display:flex; flex-direction:column; gap:8px; }
   .tonebar-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap; }
@@ -93,6 +107,21 @@
   .turn { font-size:13px; color:var(--muted); }
   .hand { display:grid; grid-template-columns:repeat(auto-fill, minmax(168px, 1fr)); gap:12px; min-height:220px; }
   .empty-hand { color:var(--muted); font-size:14px; align-self:center; }
+  .chorus { font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .chorus.on { color:var(--gold); }
+  .hand-btns { display:flex; gap:8px; flex-wrap:wrap; }
+  .btn.hold[aria-pressed="true"] { border-color:var(--gold); box-shadow:0 0 0 1px rgba(242,192,102,.45); }
+  .hand.holding .card:not(:disabled) { outline:2px dashed var(--gold); outline-offset:2px; }
+
+  /* Attuned relic and held breath */
+  .slots { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .slot { background:var(--panel-2); border:1px dashed var(--line-2); border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .slot.filled { border-style:solid; }
+  .slot .card { padding:10px; }
+  .slot .card .title { font-size:15px; }
+  .slot .card .flav { display:none; }
+  .slot .muted { font-size:13px; }
+  .card .passive { font-size:12.5px; color:var(--gold); }
 
   .card { font:inherit; text-align:left; color:var(--text); background:linear-gradient(170deg, #143049 0%, #102436 55%); border:1px solid var(--line-2); border-radius:12px; padding:12px; position:relative; box-shadow:0 4px 12px rgba(0,0,0,0.35); display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:transform .18s ease, box-shadow .25s, opacity .25s, filter .25s; min-width:0; }
   .card::before { content:""; position:absolute; inset:0 0 auto 0; height:4px; border-radius:12px 12px 0 0; background:var(--th); opacity:.7; }
@@ -135,6 +164,19 @@
   .log div:first-child { animation:slideIn .3s ease; }
   .you { color:var(--success); font-weight:600; } .storm { color:var(--danger); font-weight:600; }
 
+  /* Leaderboard */
+  .board-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+  .board { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
+  .board li { display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; background:var(--panel-2); border:1px solid var(--line); }
+  .board li.me { border-color:var(--gold); box-shadow:0 0 0 1px rgba(242,192,102,.35); }
+  .board .rank { font-family:var(--display); font-size:18px; color:var(--muted); text-align:center; font-variant-numeric:tabular-nums; }
+  .board li:nth-child(1) .rank { color:var(--gold); }
+  .board .who { min-width:0; display:flex; flex-direction:column; }
+  .board .who b { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .board .who span { font-size:12.5px; color:var(--muted); }
+  .board .pts { font-family:var(--display); font-size:20px; font-variant-numeric:tabular-nums; }
+  .board .empty { display:block; color:var(--muted); font-size:14px; background:none; border:1px dashed var(--line); }
+
   /* Card index */
   details.panel > summary { cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:8px; }
   details.panel > summary::-webkit-details-marker { display:none; }
@@ -162,7 +204,7 @@
 
   /* End screen */
   [hidden] { display:none !important; }
-  #endScreen { position:fixed; inset:0; background:rgba(4,12,22,.78); backdrop-filter:blur(3px); display:grid; place-items:center; z-index:40; padding:16px; }
+  #endScreen { position:fixed; inset:0; background:rgba(4,12,22,.78); backdrop-filter:blur(3px); display:grid; place-items:center; z-index:40; padding:16px; overflow:auto; }
   .end-card { background:var(--panel); border:1px solid var(--line-2); border-radius:16px; padding:28px 24px; text-align:center; max-width:420px; width:100%; display:flex; flex-direction:column; gap:12px; animation:rise .5s cubic-bezier(.2,.9,.3,1.2); }
   @keyframes rise { from { opacity:0; transform:translateY(30px) scale(.95); } }
   .end-card h2 { font-family:var(--display); font-weight:400; font-size:32px; margin:0; }
@@ -170,6 +212,27 @@
   .end-card.lose h2 { color:var(--danger); }
   .end-card p { margin:0; color:var(--soft); }
   .end-stats { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+  .end-score { font-family:var(--display); font-size:40px; line-height:1; color:var(--text); }
+  .end-score small { display:block; font-family:var(--body); font-size:12px; color:var(--muted); letter-spacing:.6px; text-transform:uppercase; margin-bottom:4px; }
+  #diffScreen, #choiceScreen { position:fixed; inset:0; background:rgba(4,12,22,.78); backdrop-filter:blur(3px); display:grid; place-items:center; z-index:41; padding:16px; overflow:auto; }
+  .diff-card { background:var(--panel); border:1px solid var(--line-2); border-radius:16px; padding:22px 20px; max-width:480px; width:100%; display:flex; flex-direction:column; gap:10px; animation:rise .35s cubic-bezier(.2,.9,.3,1.2); }
+  .diff-card h2 { font-family:var(--display); font-weight:400; font-size:26px; margin:0; }
+  .diff-card > p { margin:0; color:var(--muted); font-size:14px; }
+  .diff-opt { font:inherit; text-align:left; color:var(--text); cursor:pointer; display:grid; grid-template-columns:1fr auto; gap:2px 12px; padding:12px 14px; border-radius:10px; background:var(--panel-2); border:1px solid var(--line); transition:border-color .15s, background .15s; }
+  .diff-opt:hover { border-color:var(--line-2); background:#132a40; }
+  .diff-opt:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .diff-opt[aria-pressed="true"] { border-color:var(--gold); box-shadow:0 0 0 1px rgba(242,192,102,.4); }
+  .diff-opt b { font-family:var(--display); font-weight:400; font-size:19px; }
+  .diff-opt .mult { font-weight:700; font-size:13px; color:var(--gold); align-self:center; grid-row:span 2; white-space:nowrap; }
+  .diff-opt span.d { font-size:13.5px; color:var(--soft); }
+  .diff-opt[data-d="abyss"] b { color:#ffb3bd; } .diff-opt[data-d="maelstrom"] b { color:var(--danger); }
+  .diff-badge { display:inline-block; margin-left:6px; padding:0 7px; border-radius:999px; font-size:12px; border:1px solid var(--line-2); color:var(--soft); }
+  .save-box { display:flex; flex-direction:column; gap:8px; padding:12px; border-radius:10px; background:var(--panel-2); border:1px solid var(--line); }
+  .save-row { display:flex; gap:8px; }
+  .save-row input { flex:1; min-width:0; font:inherit; font-size:16px; color:var(--text); background:#0a1826; border:1px solid var(--line-2); border-radius:8px; padding:8px 10px; }
+  .save-row input:focus-visible { outline:2px solid var(--accent); outline-offset:1px; }
+  .save-msg { font-size:13px; color:var(--muted); min-height:1em; }
+  .save-msg.ok { color:var(--success); } .save-msg.err { color:#ff9a9a; }
 
   @media (max-width:820px) {
     .lower { grid-template-columns:1fr 1fr; }
@@ -177,6 +240,7 @@
   }
   @media (max-width:520px) {
     .gauges { grid-template-columns:1fr; }
+    .slots { grid-template-columns:1fr; }
     .tones { grid-template-columns:repeat(3, 1fr); }
     .hand { grid-template-columns:1fr 1fr; gap:8px; }
     .card { padding:10px; }
@@ -192,12 +256,13 @@
 </head>
 <body>
 
-
 <div class="wrap" id="wrap">
   <header>
     <h1>Prophecy of the Listener<small>Relicsong Card Game. Align your tone, steady the paradox, and outsing the Resonance Storm.</small></h1>
     <div class="head-btns">
       <a class="btn" href="rules.html" style="text-decoration:none">Rules for beginners</a>
+      <button class="btn" id="diffBtn" type="button" aria-haspopup="dialog">Difficulty: Listener</button>
+      <button class="btn" id="modeBtn" type="button">Mode: Single storm</button>
       <button class="btn" id="soundBtn" type="button" aria-pressed="true">Sound: On</button>
       <button class="btn" id="newGame" type="button">New Game</button>
     </div>
@@ -222,6 +287,11 @@
     </div>
   </section>
 
+  <section class="panel intent" aria-label="What the storm will do" aria-live="polite">
+    <span class="label">The Storm prepares</span>
+    <div class="intents" id="intents"></div>
+  </section>
+
   <section class="panel tonebar" aria-label="Choose your tone">
     <div class="tonebar-head">
       <span class="label">Active Tone</span>
@@ -236,8 +306,16 @@
         <span class="label">Your Hand</span>
         <span class="pips" id="pips" title="Plays left this turn"></span>
         <span class="turn" id="turnInfo">Turn 1</span>
+        <span class="chorus" id="chorusInfo" title="Make all 3 plays match your tone for a Chorus"></span>
       </div>
-      <button class="btn primary" id="endTurn" type="button">End Turn</button>
+      <div class="hand-btns">
+        <button class="btn hold" id="holdBtn" type="button" aria-pressed="false">Hold a card</button>
+        <button class="btn primary" id="endTurn" type="button">End Turn</button>
+      </div>
+    </div>
+    <div class="slots">
+      <div class="slot" id="attuneSlot" aria-label="Attuned relic"></div>
+      <div class="slot" id="heldSlot" aria-label="Held breath"></div>
     </div>
     <div class="hand" id="hand"></div>
   </section>
@@ -258,13 +336,30 @@
     </div>
   </section>
 
+  <section class="panel" id="boardPanel" aria-label="Leaderboard">
+    <div class="board-head">
+      <span class="label">Leaderboard: top 10</span>
+      <span class="muted" id="boardNote">Loading scores…</span>
+    </div>
+    <ol class="board" id="board"></ol>
+  </section>
+
   <details class="panel" id="indexPanel">
     <summary><span class="label">How to play and card index</span></summary>
     <div class="rules">
       <p><b>Goal:</b> reach 10 Resonance before Storm Instability reaches 10 or your Health hits 0.</p>
-      <p><b>Each turn</b> you can play up to 3 cards. Click a card to play it, or press keys 1 to 7. Then press End Turn (or E), and the Storm acts.</p>
+      <p><b>Each turn</b> you can play up to 3 cards. Click a card to play it, or press keys 1 to 7. Then press End Turn (or E), and the Storm acts. In a Voyage, you face three Storms in a row.</p>
       <p><b>Tone matters.</b> Pick a tone with the buttons above. Playing a card that matches your tone gives +1 extra on any Resonance it grants, as long as Paradox is 0. Playing a card that does not match costs 1 Resonance.</p>
-      <p><b>The Storm</b> can raise Instability, add Paradox, hit you for 2 (Shield absorbs it first), or grow stronger. At Intensity 2 or more it acts twice a turn.</p>
+      <p><b>Changing tone:</b> on Listener, your first tone change each turn is free. Every extra change costs 1 Resonance, or adds 1 Paradox if you have no Resonance to pay.</p>
+      <p><b>Difficulty:</b> use the Difficulty button to pick Novice (score ×0.5), Listener (×1), Abyss (×1.5) or Maelstrom (×2). Harder levels give you less Health, start the storm stronger, bring the rising tide sooner and, on Maelstrom, take away your free tone change. Changing difficulty starts a new game.</p>
+      <p><b>The Storm</b> shows its next moves in the red strip before it acts. Swell raises Instability by 2, Strike hits you for 2 (Shield absorbs it first), Fracture adds Paradox, Surge raises its Intensity, Discord forces a random tone on you, Drown throws away a random card from your hand, and Silence leaves you only 2 plays next turn. At Intensity 2 or more it makes two moves a turn.</p>
+      <p><b>Rising tide:</b> from turn 8 on (sooner on harder levels), every storm turn also adds 1 Instability. Don't stall.</p>
+      <p><b>Counter-song:</b> each tone answers one Storm move. Play a card that matches your tone while its move is warned, and that move is softened: Empathetic turns a Strike into 1 damage, Vulnerable turns a Swell into +1, Calm cancels Fracture, Reflective cancels Discord and Curious cancels Drown. One card answers one move.</p>
+      <p><b>Chorus:</b> make all 3 of your plays in a turn match your tone while Paradox is 0, and you choose +1 Resonance or −1 Instability.</p>
+      <p><b>Attuned Relics:</b> after you play a Relic you can attune it instead of discarding it. It sits in your Relic slot and gives its passive effect every turn until a Fracture shatters it. You have one slot; attuning a new Relic sends the old one to your discard.</p>
+      <p><b>Held breath:</b> once per turn, press Hold a card (or H) and pick a card. It waits in the held slot, safe from Drown, and doesn't count toward your 5-card hand. Click it to play it on any later turn.</p>
+      <p><b>Voyage:</b> switch Mode to Voyage to sing through three Storms in a row. After each calmed Storm you add one new card to your deck, heal 2 Health and keep the rest. Each Storm starts a little wilder. Your score adds up across all three.</p>
+      <p><b>Scoring:</b> a win is worth 1000, plus 40 for every turn under 25, plus 25 per Health and 10 per Shield left. A loss scores 50 per Resonance reached plus 10 per turn survived. The total is then multiplied by your difficulty. The leaderboard keeps each player's best.</p>
     </div>
     <div class="catalog" id="catalog"></div>
   </details>
@@ -274,6 +369,8 @@
 <div id="stormBanner"></div>
 <div id="toast" class="toast" role="status"></div>
 <div id="endScreen" hidden></div>
+<div id="diffScreen" class="overlay" hidden></div>
+<div id="choiceScreen" class="overlay" hidden></div>
 
 <script>
 (function(){
@@ -283,42 +380,115 @@
   const TONES = ["Calm","Empathetic","Reflective","Curious","Vulnerable"];
   const TONE_PITCH = { Calm:392, Empathetic:440, Reflective:494, Curious:587, Vulnerable:659 };
 
-  // ---------- Card definitions (same cards and rules as the original) ----------
+  // ---------- Card definitions ----------
   const DEFS = {
     "Breath of Tide":          { type:"Verse", tone:"Calm",       copies:3, text:"Stabilize a paradox surge. Gain +2 Resonance.", flavor:"The sea inhales, and time steadies.", play:()=> addResonance(2) },
     "Pulse of Crystal":        { type:"Verse", tone:"Empathetic", copies:3, text:"Align resonance. Gain 2 Shield.", flavor:"A heartbeat in glass, empathy refracted.", play:()=> addShield(2) },
     "Drift of Memory":         { type:"Verse", tone:"Reflective", copies:3, text:"Reveal a forgotten truth. Gain +1 Resonance and draw 1.", flavor:"You remember what never happened.", play:()=> { addResonance(1); drawCards(1); } },
     "Bloom of Light":          { type:"Verse", tone:"Curious",    copies:3, text:"Illuminate hidden glyphs. Draw 2 cards.", flavor:"Curiosity becomes lanterns in the deep.", play:()=> drawCards(2) },
     "Listener’s Echo":         { type:"Verse", tone:"Vulnerable", copies:3, text:"Cross-species communion. Reduce Instability by 2.", flavor:"A word made of light, heard by the ocean.", play:()=> reduceInstability(2) },
-    "Breath-Shell":            { type:"Relic", tone:"Calm",       copies:1, text:"Cancel a paradox. Gain +1 Resonance and +1 Shield.", flavor:"A conch that sings calm into storms.", play:()=> { addResonance(1); addShield(1); adjustParadox(-1); } },
-    "Crystal Mask Fragment":   { type:"Relic", tone:"Empathetic", copies:1, text:"+2 to alignment. Gain +2 Shield.", flavor:"A shard of Tharen’s ascension.", play:()=> { addShield(2); log("Your mask hums with light.", "you"); } },
-    "Drift-Spiral Charm":      { type:"Relic", tone:"Reflective", copies:1, text:"Recall a truth. Draw 2.", flavor:"A curl of memory that catches echoes.", play:()=> drawCards(2) },
-    "Tide-Bloom Pendant":      { type:"Relic", tone:"Curious",    copies:1, text:"Reveal secrets. Gain +1 Resonance and draw 1.", flavor:"A flower from the tide that glows with secrets.", play:()=> { addResonance(1); drawCards(1); } },
-    "Listener’s Archive Shard":{ type:"Relic", tone:"Vulnerable", copies:1, text:"Stabilize the world. Reduce Instability by 3.", flavor:"A sliver of the sea’s own memory.", play:()=> reduceInstability(3) },
+    "Breath-Shell":            { type:"Relic", tone:"Calm",       copies:1, text:"Cancel a paradox. Gain +1 Resonance and +1 Shield.", flavor:"A conch that sings calm into storms.", passive:"Each Strike deals 1 less damage.", play:()=> { addResonance(1); addShield(1); adjustParadox(-1); } },
+    "Crystal Mask Fragment":   { type:"Relic", tone:"Empathetic", copies:1, text:"+2 to alignment. Gain +2 Shield.", flavor:"A shard of Tharen’s ascension.", passive:"Gain 1 Shield at the start of each of your turns.", play:()=> { addShield(2); log("Your mask hums with light.", "you"); } },
+    "Drift-Spiral Charm":      { type:"Relic", tone:"Reflective", copies:1, text:"Recall a truth. Draw 2.", flavor:"A curl of memory that catches echoes.", passive:"Your hand fills to 6 cards instead of 5.", play:()=> drawCards(2) },
+    "Tide-Bloom Pendant":      { type:"Relic", tone:"Curious",    copies:1, text:"Reveal secrets. Gain +1 Resonance and draw 1.", flavor:"A flower from the tide that glows with secrets.", passive:"Your first off-tone play each turn costs no Resonance.", play:()=> { addResonance(1); drawCards(1); } },
+    "Listener’s Archive Shard":{ type:"Relic", tone:"Vulnerable", copies:1, text:"Stabilize the world. Reduce Instability by 3.", flavor:"A sliver of the sea’s own memory.", passive:"The rising tide only comes in every other turn.", play:()=> reduceInstability(3) },
     "Echo Reversal":           { type:"Echo",  tone:"Reflective", copies:1, text:"Swap your tone with the Storm’s intensity. Then draw 1.", flavor:"The spiral turns back upon itself.", play:()=> { setTone(toneFromIntensity(S.intensity), true); drawCards(1); log("Echo Reversal shifts your resonance.", "you"); } },
     "Glyph Cascade":           { type:"Echo",  tone:"Curious",    copies:1, text:"Random verse triggers. Then take 1 Paradox.", flavor:"Runes tumble like rain.", play:()=> { randomVerse(); adjustParadox(1); } },
     "Resonance Surge":         { type:"Event", tone:"Empathetic", copies:1, text:"Gain +3 Resonance. Take 1 damage.", flavor:"Your song cracks the sky.", play:()=> { addResonance(3); damagePlayer(1); } },
-    "Calm the Tempest":        { type:"Event", tone:"Calm",       copies:1, text:"Reduce Instability by 4. End your turn.", flavor:"You speak and the storm sits.", play:()=> { reduceInstability(4); S.endAfterPlay = true; } }
+    "Calm the Tempest":        { type:"Event", tone:"Calm",       copies:1, text:"Reduce Instability by 4. End your turn.", flavor:"You speak and the storm sits.", play:()=> { reduceInstability(4); S.endAfterPlay = true; } },
+    // Voyage rewards: never in the starter deck, offered after each calmed storm
+    "Whale-Song Verse":        { type:"Verse", tone:"Vulnerable", copies:0, pool:true, text:"Reduce Instability by 1. Gain +1 Resonance.", flavor:"Something vast sings back.", play:()=> { reduceInstability(1); addResonance(1); } },
+    "Deepglass Verse":         { type:"Verse", tone:"Reflective", copies:0, pool:true, text:"Gain 1 Shield and draw 1.", flavor:"The deep holds still enough to see through.", play:()=> { addShield(1); drawCards(1); } },
+    "Coral Lattice":           { type:"Relic", tone:"Empathetic", copies:0, pool:true, text:"Gain +1 Resonance and +1 Shield.", flavor:"It grows where songs are sung.", passive:"Each Chorus also gives you 1 Shield.", play:()=> { addResonance(1); addShield(1); } },
+    "Tidewright’s Bell":       { type:"Relic", tone:"Calm",       copies:0, pool:true, text:"Reduce Instability by 2.", flavor:"Rung once, the waves remember their shape.", passive:"Each Swell adds 1 less Instability.", play:()=> reduceInstability(2) },
+    "Lantern of Rahdaria":     { type:"Relic", tone:"Curious",    copies:0, pool:true, text:"Gain +1 Resonance and draw 1.", flavor:"Light carried from a city under the sea.", passive:"Silence has no effect on you.", play:()=> { addResonance(1); drawCards(1); } },
+    "Mirror Tide":             { type:"Echo",  tone:"Empathetic", copies:0, pool:true, text:"Answer the next warned Storm move, whatever it is. Draw 1.", flavor:"The sea shows the storm its own face.", play:()=> { const i = S.intents.findIndex((k,j)=> !S.answered[j]); if(i>=0) answerIntent(i, "Mirror Tide"); else log("Mirror Tide finds nothing left to answer.", "you"); drawCards(1); } },
+    "Undertow Echo":           { type:"Echo",  tone:"Calm",       copies:0, pool:true, text:"Discard your hand, then draw that many cards plus 1.", flavor:"What the sea takes, it gives back changed.", play:()=> { const n = S.hand.length; S.discard.push(...S.hand.splice(0)); freshDiscard = true; log(`Undertow Echo pulls ${n} card${n===1?"":"s"} under.`, "you"); drawCards(n+1); } },
+    "Tharen’s Hymn":           { type:"Event", tone:"Reflective", copies:0, pool:true, text:"Gain +4 Resonance. Instability +2.", flavor:"A song from the one who rose.", play:()=> { addResonance(4); if(!S.over){ S.instability += 2; log("Tharen’s Hymn stirs the storm: Instability +2.", "storm"); floatText("gIns","+2 Instability","bad"); bump("instability"); checkEnd(); } } }
   };
-  const VERSE_NAMES = Object.keys(DEFS).filter(n=> DEFS[n].type==="Verse");
+  const VERSE_NAMES = Object.keys(DEFS).filter(n=> DEFS[n].type==="Verse" && !DEFS[n].pool);
+  const POOL_NAMES = Object.keys(DEFS).filter(n=> DEFS[n].pool);
 
-  // ---------- State (plain data so it survives page updates) ----------
+  // ---------- State ----------
   let S = null;
   let nextId = 1;
   let busy = false;
-  let fresh = new Set();      // card ids just drawn, for the deal-in animation
+  let fresh = new Set();
   let freshDiscard = false;
 
   function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-  function starterDeck(){
+  function starterDeck(extra=[]){
     const deck = [];
     Object.entries(DEFS).forEach(([name,d])=>{ for(let i=0;i<d.copies;i++) deck.push({ id:nextId++, name }); });
+    extra.forEach(name=> { if(DEFS[name]) deck.push({ id:nextId++, name }); });
     return shuffle(deck);
   }
-  function freshState(){
-    return { resonance:0, health:10, shield:0, instability:0, paradox:0, tone:"Calm",
-      hand:[], discard:[], draw:starterDeck(), playsLeft:3, turn:1, intensity:1,
-      over:null, current:null, endAfterPlay:false, log:[] };
+  // ---------- Difficulty ----------
+  const DIFFS = {
+    novice:    { name:"Novice",    mult:0.5, health:12, instab:0, intensity:1, tide:10, free:2, gentle:true,
+                 desc:"12 Health. Two free tone changes a turn. The storm never Drowns or Silences. Rising tide from turn 10." },
+    listener:  { name:"Listener",  mult:1,   health:10, instab:0, intensity:1, tide:8,  free:1, gentle:false,
+                 desc:"The standard game. 10 Health, one free tone change, rising tide from turn 8." },
+    abyss:     { name:"Abyss",     mult:1.5, health:8,  instab:2, intensity:2, tide:7,  free:1, gentle:false,
+                 desc:"8 Health. Instability starts at 2. The storm makes two moves from turn 1. Rising tide from turn 7." },
+    maelstrom: { name:"Maelstrom", mult:2,   health:7,  instab:3, intensity:2, tide:6,  free:0, gentle:false,
+                 desc:"7 Health. Instability starts at 3. Two storm moves from turn 1. Every tone change costs. Rising tide from turn 6." }
+  };
+  let diffKey = "listener";
+  try { const k = localStorage.getItem("relicsong-difficulty"); if(DIFFS[k]) diffKey = k; } catch(e){}
+  const D = ()=> DIFFS[(S && DIFFS[S.diff]) ? S.diff : diffKey];
+  let modeKey = "single";
+  try { if(localStorage.getItem("relicsong-mode")==="voyage") modeKey = "voyage"; } catch(e){}
+  const VOYAGE_STORMS = 3;
+
+  // v carries a Voyage between storms; each later storm starts a little wilder
+  function freshState(v){
+    const diff = (v && S && DIFFS[S.diff]) ? S.diff : diffKey, d = DIFFS[diff];
+    if(!v && modeKey==="voyage") v = { stage:1, banked:0, added:[], totalTurns:0 };
+    const stage = v ? v.stage : 1;
+    return { resonance:0, health:d.health, shield:0, instability:d.instab + (stage-1), paradox:0, tone:"Calm",
+      hand:[], discard:[], draw:starterDeck(v ? v.added : []), playsLeft:3, turn:1, intensity:d.intensity + (stage>=3 ? 1 : 0),
+      over:null, current:null, endAfterPlay:false, log:[], saved:false,
+      toneChanges:0, intents:[], answered:[], diff,
+      attuned:null, held:null, heldThisTurn:false, turnPlays:0, chorusAlive:true, offFree:false,
+      voyage: v || null };
+  }
+  const attuned = (name)=> !!(S.attuned && S.attuned.name===name);
+  const handSize = ()=> attuned("Drift-Spiral Charm") ? 6 : 5;
+
+  // ---------- Storm intents ----------
+  const INTENTS = {
+    swell:   { name:"Swell",    desc:"+2 Instability",          soft:"only +1 Instability",  w:3 },
+    strike:  { name:"Strike",   desc:"2 damage to you",         soft:"only 1 damage",        w:3 },
+    fracture:{ name:"Fracture", desc:"+1 Paradox, shatters your Relic", soft:"cancelled",     w:2 },
+    discord: { name:"Discord",  desc:"Forces a random tone",    soft:"cancelled",            w:2 },
+    drown:   { name:"Drown",    desc:"Discards a random card",  soft:"cancelled",            w:2 },
+    silence: { name:"Silence",  desc:"Only 2 plays next turn",  soft:"cancelled",            w:1 },
+    surge:   { name:"Surge",    desc:"Intensity +1",            soft:"cancelled",            w:1 }
+  };
+  // Counter-song: a matching card of this tone answers the warned move
+  const COUNTERS = { strike:"Empathetic", swell:"Vulnerable", fracture:"Calm", discord:"Reflective", drown:"Curious" };
+  function answerFor(t){ return (S.intents||[]).findIndex((k,j)=> !S.answered[j] && COUNTERS[k]===t); }
+  function answerIntent(i, by){
+    const k = S.intents[i]; S.answered[i] = true;
+    log(`${by} answers the ${INTENTS[k].name}: ${INTENTS[k].soft}.`, "you");
+    floatText("gIns", `${INTENTS[k].name} answered`, "good"); sfx.shield();
+  }
+  function pickIntent(exclude){
+    if(D().gentle) exclude = exclude.concat(["drown","silence"]);
+    const keys = Object.keys(INTENTS).filter(k=> !exclude.includes(k));
+    let total = keys.reduce((s,k)=> s + INTENTS[k].w, 0), r = Math.random()*total;
+    for(const k of keys){ r -= INTENTS[k].w; if(r<=0) return k; }
+    return keys[keys.length-1];
+  }
+  function rollIntents(){
+    const n = Math.min(2, S.intensity), out = [];
+    for(let i=0;i<n;i++){
+      // Silence and Surge never stack with themselves in one turn
+      out.push(pickIntent(out.filter(k=> k==="silence" || k==="surge")));
+    }
+    S.intents = out;
+    S.answered = out.map(()=> false);
   }
 
   // ---------- Sound ----------
@@ -369,7 +539,6 @@
 
   // ---------- Core mechanics ----------
   function synergyBonus(){
-    // +1 when the card being played matches your active tone and Paradox is 0
     const d = S.current && DEFS[S.current];
     return (d && d.tone===S.tone && S.paradox===0) ? 1 : 0;
   }
@@ -412,8 +581,26 @@
   }
   function toneFromIntensity(int){ return TONES[(int-1) % TONES.length]; }
   function setTone(t, silent){
-    if(S.tone===t) return; S.tone = t;
-    if(!silent) { toast("Tone set: " + t); sfx.tone(t); }
+    if(S.tone===t) return;
+    S.tone = t;
+    if(!silent){
+      S.toneChanges = (S.toneChanges||0) + 1;
+      if(S.toneChanges <= D().free){
+        const left = D().free - S.toneChanges;
+        toast("Tone set: " + t + (left ? ` (${left} free change left)` : " (free change used)"));
+      } else if(S.resonance>0){
+        S.resonance -= 1;
+        log(`Tone shift to ${t} costs 1 Resonance.`, "storm");
+        floatText("gRes", "-1 Tone shift", "bad"); bump("resonance");
+        toast("Tone set: " + t + ". Cost: 1 Resonance");
+      } else {
+        S.paradox += 1;
+        log(`Tone shift to ${t} with no Resonance to pay: +1 Paradox.`, "storm");
+        floatText("gIns", "+1 Paradox", "bad"); bump("pParadox");
+        toast("Tone set: " + t + ". Cost: 1 Paradox");
+      }
+      sfx.tone(t);
+    }
     render();
   }
   function randomVerse(){
@@ -423,31 +610,117 @@
     DEFS[pick].play();
   }
 
+  // A small blocking choice dialog. options: [{label, tag, desc}]. Resolves with the picked index.
+  function choose(title, text, options){
+    return new Promise(resolve=>{
+      const cs = $("choiceScreen"); cs.innerHTML = "";
+      const card = document.createElement("div"); card.className = "diff-card";
+      card.setAttribute("role","dialog"); card.setAttribute("aria-modal","true"); card.setAttribute("aria-labelledby","choiceTitle");
+      const h = document.createElement("h2"); h.id = "choiceTitle"; h.textContent = title;
+      card.appendChild(h);
+      if(text){ const p = document.createElement("p"); p.textContent = text; card.appendChild(p); }
+      options.forEach((o, i)=>{
+        const b = document.createElement("button"); b.type = "button"; b.className = "diff-opt";
+        const nm = document.createElement("b"); nm.textContent = o.label;
+        b.appendChild(nm);
+        if(o.tag){ const m = document.createElement("span"); m.className = "mult"; m.textContent = o.tag; b.appendChild(m); }
+        if(o.desc){ const ds = document.createElement("span"); ds.className = "d"; ds.textContent = o.desc; b.appendChild(ds); }
+        b.onclick = ()=>{ cs.hidden = true; cs.innerHTML = ""; resolve(i); };
+        card.appendChild(b);
+      });
+      cs.appendChild(card);
+      cs.hidden = false;
+      const first = card.querySelector("button"); if(first) first.focus();
+    });
+  }
+
+  async function chorus(){
+    log("Chorus! All three plays matched your tone.", "you");
+    const b = $("stormBanner"); b.textContent = "Chorus"; b.classList.remove("show"); void b.offsetWidth; b.classList.add("show");
+    sfx.win();
+    let pick = 0;
+    if(S.instability>0){
+      pick = await choose("Chorus", "All three of your plays matched your tone. Choose your reward.", [
+        { label:"+1 Resonance", desc:`You have ${S.resonance}. Ten wins.` },
+        { label:"−1 Instability", desc:`The storm is at ${S.instability}.` }
+      ]);
+    }
+    S.current = null;
+    if(pick===0){ S.resonance += 1; log("Chorus: Resonance +1.", "you"); floatText("gRes","+1 Chorus","good"); bump("resonance"); }
+    else reduceInstability(1);
+    if(attuned("Coral Lattice")) addShield(1);
+    checkEnd();
+  }
+
+  async function offerAttune(card){
+    const d = DEFS[card.name], old = S.attuned;
+    const pick = await choose(`Attune ${card.name}?`,
+      "An attuned Relic stays in your Relic slot and works every turn until a Fracture shatters it." + (old ? ` It replaces ${old.name}, which goes to your discard.` : ""),
+      [ { label:"Attune it", tag:d.tone, desc:d.passive }, { label:"Discard as usual", desc:"Keep it in your deck's cycle instead." } ]);
+    if(pick!==0) return false;
+    if(old){ S.discard.push(old); log(`${old.name} leaves your Relic slot.`, "you"); }
+    S.attuned = card;
+    log(`${card.name} is attuned: ${d.passive}`, "you"); toast("Attuned: " + card.name); sfx.shield();
+    return true;
+  }
+
+  let holdMode = false;
+  function toggleHold(){
+    if(S.over || busy) return;
+    if(S.held){ toast("Your held slot is full. Play the held card first."); sfx.nope(); return; }
+    if(S.heldThisTurn){ toast("You already held a card this turn."); sfx.nope(); return; }
+    holdMode = !holdMode;
+    if(holdMode) toast("Pick a card to hold.");
+    render();
+  }
+  function holdCard(id){
+    const idx = S.hand.findIndex(c=> c.id===id); if(idx<0) return;
+    S.held = S.hand.splice(idx,1)[0]; S.heldThisTurn = true; holdMode = false;
+    log(`You hold ${S.held.name} in a held breath.`, "you"); toast("Held: " + S.held.name); sfx.tone(DEFS[S.held.name].tone);
+    render();
+  }
+
   async function playCard(id, el){
     if(S.over || busy) return;
+    if(holdMode && S.hand.some(c=> c.id===id)){ holdCard(id); return; }
     if(S.playsLeft<=0){ toast("No plays left. Press End Turn."); sfx.nope(); shakeEl($("pips")); $("endTurn").classList.add("pulse"); return; }
-    const idx = S.hand.findIndex(c=> c.id===id); if(idx<0) return;
+    const idx = S.hand.findIndex(c=> c.id===id);
+    const fromHeld = idx<0 && S.held && S.held.id===id;
+    if(idx<0 && !fromHeld) return;
     busy = true;
-    const card = S.hand[idx], d = DEFS[card.name];
+    const card = fromHeld ? S.held : S.hand[idx], d = DEFS[card.name];
+    const matched = d.tone===S.tone;
     if(el){ el.classList.add("playing"); }
-    if(d.tone===S.tone) sfx.play(d.tone); else sfx.off();
+    if(matched) sfx.play(d.tone); else sfx.off();
     await sleep(380);
-    S.hand.splice(idx,1);
+    if(fromHeld) S.held = null; else S.hand.splice(idx,1);
     S.playsLeft--;
-    log(`You play ${card.name}.`, "you");
-    if(d.tone !== S.tone){
-      const lost = Math.min(1, S.resonance);
-      S.resonance -= lost;
-      log(`Tone mismatch: ${S.tone} vs ${d.tone}.${lost ? " -1 Resonance." : ""}`, "storm");
-      if(lost) floatText("gRes", "-1 Off-tone", "bad");
+    S.turnPlays = (S.turnPlays||0) + 1;
+    log(`You play ${card.name}${fromHeld ? " from your held breath" : ""}.`, "you");
+    if(!matched){
+      S.chorusAlive = false;
+      if(attuned("Tide-Bloom Pendant") && !S.offFree){
+        S.offFree = true;
+        log(`Tone mismatch: ${S.tone} vs ${d.tone}. Tide-Bloom Pendant covers the cost.`, "you");
+      } else {
+        const lost = Math.min(1, S.resonance);
+        S.resonance -= lost;
+        log(`Tone mismatch: ${S.tone} vs ${d.tone}.${lost ? " -1 Resonance." : ""}`, "storm");
+        if(lost) floatText("gRes", "-1 Off-tone", "bad");
+      }
     } else {
       log(`Tone aligned: ${d.tone}.`, "you");
+      const ai = answerFor(d.tone);
+      if(ai>=0) answerIntent(ai, `Your ${d.tone} song`);
     }
     S.current = card.name;
     d.play();
     S.current = null;
-    S.discard.push(card); freshDiscard = true;
     checkEnd();
+    let kept = false;
+    if(!S.over && d.type==="Relic" && d.passive){ render(); kept = await offerAttune(card); }
+    if(!kept){ S.discard.push(card); freshDiscard = true; }
+    if(!S.over && S.turnPlays===3 && S.chorusAlive && S.paradox===0){ render(); await chorus(); }
     busy = false;
     render();
     if(S.endAfterPlay && !S.over){ S.endAfterPlay = false; await endTurn(true); }
@@ -455,11 +728,13 @@
 
   async function endTurn(calmed=false){
     if(S.over || busy) return;
-    busy = true; $("endTurn").classList.remove("pulse"); render();
+    busy = true; holdMode = false; $("endTurn").classList.remove("pulse"); render();
     S.playsLeft = 3;
+    S.toneChanges = 0;
+    S.turnPlays = 0; S.chorusAlive = true; S.heldThisTurn = false; S.offFree = false;
     if(S.paradox>0){ S.paradox--; log("Paradox fades by 1.", "you"); }
     let guard = 0;
-    while(S.hand.length<5 && (S.draw.length || S.discard.length) && guard++<10) drawCards(1);
+    while(S.hand.length<handSize() && (S.draw.length || S.discard.length) && guard++<10) drawCards(1);
     render();
     if(calmed){
       log("The storm sits still. It does not act this turn.", "you");
@@ -467,50 +742,266 @@
     } else {
       await stormTurn();
     }
-    S.turn++;
+    if(!S.over && attuned("Crystal Mask Fragment")){ log("Crystal Mask Fragment glows.", "you"); addShield(1); }
+    if(!S.over) S.turn++;
     busy = false;
     render();
   }
 
+  function shatterRelic(){
+    if(!S.attuned) return;
+    const c = S.attuned; S.attuned = null; S.discard.push(c); freshDiscard = true;
+    log(`Fracture shatters your attuned ${c.name}. It falls to your discard.`, "storm"); toast("Shattered: " + c.name);
+  }
+
+  function runIntent(k, answered){
+    if(answered && k!=="strike" && k!=="swell"){
+      log(`${INTENTS[k].name} was answered and passes harmlessly.`, "you"); return;
+    }
+    switch(k){
+      case "swell": {
+        let n = answered ? 1 : 2;
+        if(attuned("Tidewright’s Bell")) n -= 1;
+        if(n<=0){ log("Swell breaks against Tidewright’s Bell.", "you"); break; }
+        S.instability += n; log(`Swell: Instability +${n}.`, "storm"); floatText("gIns",`+${n} Instability`,"bad"); bump("instability"); shakeEl($("gIns")); sfx.hit(); break;
+      }
+      case "strike": {
+        let n = answered ? 1 : 2;
+        if(attuned("Breath-Shell")) n -= 1;
+        if(n<=0){ log("Strike is turned aside by Breath-Shell.", "you"); break; }
+        log("Strike!", "storm"); damagePlayer(n); shakeEl($("gRes")); break;
+      }
+      case "fracture": S.paradox += 1; log("Fracture: Paradox +1.", "storm"); floatText("gIns","+1 Paradox","bad"); bump("pParadox"); sfx.hit(); shatterRelic(); break;
+      case "surge": S.intensity += 1; log("Surge: storm intensity rises!", "storm"); floatText("gIns","Intensity up!","info"); bump("pIntensity"); sfx.storm(); break;
+      case "discord": {
+        const others = TONES.filter(t=> t!==S.tone), t = others[Math.floor(Math.random()*others.length)];
+        S.tone = t; log(`Discord: your tone is forced to ${t}.`, "storm"); toast("Discord forces your tone: " + t); sfx.off(); break;
+      }
+      case "drown": {
+        if(!S.hand.length){ log("Drown finds nothing to take.", "storm"); break; }
+        const i = Math.floor(Math.random()*S.hand.length), c = S.hand.splice(i,1)[0];
+        S.discard.push(c); freshDiscard = true;
+        log(`Drown: ${c.name} is swept from your hand.`, "storm"); toast("Drowned: " + c.name); sfx.hit(); break;
+      }
+      case "silence": if(attuned("Lantern of Rahdaria")){ log("Silence falls, but the Lantern keeps your voice.", "you"); break; } S.playsLeft = 2; log("Silence: only 2 plays next turn.", "storm"); shakeEl($("pips")); sfx.nope(); break;
+    }
+  }
+
   async function stormTurn(){
-    const acts = Math.min(2, S.intensity);
     document.body.classList.add("storming");
     $("stormVeil").classList.add("on");
     const b = $("stormBanner"); b.textContent = "The Resonance Storm churns…"; b.classList.remove("show"); void b.offsetWidth; b.classList.add("show");
     sfx.storm();
     log("The Resonance Storm churns...", "storm");
     await sleep(900);
-    for(let i=0;i<acts && !S.over;i++){
-      const roll = Math.floor(Math.random()*4);
-      switch(roll){
-        case 0: S.instability += 2; log("Instability +2.", "storm"); floatText("gIns","+2 Instability","bad"); bump("instability"); shakeEl($("gIns")); sfx.hit(); break;
-        case 1: S.paradox += 1; log("Paradox +1.", "storm"); floatText("gIns","+1 Paradox","bad"); bump("pParadox"); sfx.hit(); break;
-        case 2: damagePlayer(2); shakeEl($("gRes")); break;
-        case 3: S.intensity += 1; log("Storm intensity rises!", "storm"); floatText("gIns","Intensity up!","info"); bump("pIntensity"); sfx.storm(); break;
-      }
+    if(!Array.isArray(S.intents) || !S.intents.length) rollIntents();
+    const moves = S.intents.slice(), ans = (S.answered||[]).slice();
+    for(let i=0;i<moves.length && !S.over;i++){
+      runIntent(moves[i], !!ans[i]);
       checkEnd(); render();
       await sleep(750);
     }
+    if(!S.over && S.turn>=D().tide){
+      if(attuned("Listener’s Archive Shard") && (S.turn - D().tide) % 2 === 1){
+        log("The Archive Shard holds back the rising tide this turn.", "you");
+      } else {
+        S.instability += 1; log("Rising tide: Instability +1.", "storm");
+        floatText("gIns","+1 Rising tide","bad"); bump("instability"); sfx.hit();
+        checkEnd(); render();
+        await sleep(500);
+      }
+    }
+    if(!S.over) rollIntents();
     document.body.classList.remove("storming");
     $("stormVeil").classList.remove("on");
   }
 
   function checkEnd(){
     if(S.over) return;
-    if(S.resonance>=10){ S.over = "win"; log("Victory: The ocean remembers you.", "you"); }
+    if(S.resonance>=10){
+      if(S.voyage && S.voyage.stage<VOYAGE_STORMS){
+        S.over = "cleared"; holdMode = false;
+        log(`Storm ${S.voyage.stage} of ${VOYAGE_STORMS} is calmed. The voyage goes on.`, "you");
+        setTimeout(showCleared, 500); return;
+      }
+      S.over = "win"; log("Victory: The ocean remembers you.", "you");
+    }
     else if(S.instability>=10 || S.health<=0){ S.over = "lose"; log("Defeat: Memory fractures across Rahdaria.", "storm"); }
-    if(S.over) setTimeout(showEnd, 500);
+    if(S.over) { holdMode = false; setTimeout(showEnd, 500); }
   }
+
+  // ---------- Voyage ----------
+  async function showCleared(){
+    if(S.over!=="cleared" || !$("choiceScreen").hidden) return;
+    sfx.win();
+    const v = S.voyage;
+    const offers = shuffle(POOL_NAMES.filter(n=> !v.added.includes(n))).slice(0,3);
+    const pick = await choose(`Storm ${v.stage} of ${VOYAGE_STORMS} calmed`,
+      `Add one new card to your deck for the next Storm. You keep your Health (plus 2) and your held card.`,
+      offers.map(n=> ({ label:n, tag:`${DEFS[n].type} · ${DEFS[n].tone}`, desc: DEFS[n].text + (DEFS[n].passive ? ` Attuned: ${DEFS[n].passive}` : "") })));
+    nextStorm(offers[pick]);
+  }
+  function nextStorm(pick){
+    const v = S.voyage, prev = S;
+    v.banked += stormScore(prev.turn); v.totalTurns += prev.turn;
+    if(pick) v.added.push(pick);
+    v.stage++;
+    S = freshState(v);
+    S.health = Math.min(DIFFS[S.diff].health, prev.health + 2);
+    S.log = prev.log;
+    // A held breath carries over: pull its copy out of the new deck
+    if(prev.held){ const i = S.draw.findIndex(c=> c.name===prev.held.name); if(i>=0) S.held = S.draw.splice(i,1)[0]; }
+    log(`Storm ${v.stage} of ${VOYAGE_STORMS} rises${pick ? `. ${pick} joins your deck` : ""}.`, "storm");
+    drawCards(handSize());
+    rollIntents();
+    render();
+    toast(`Storm ${v.stage} of ${VOYAGE_STORMS}. It starts wilder than the last.`);
+  }
+
+  // ---------- Scoring ----------
+  const stormScore = (turn)=> 800 + Math.max(0, 15 - turn)*30;
+  function baseScore(st){
+    if(st.voyage){
+      const v = st.voyage;
+      if(st.over==="win") return v.banked + stormScore(st.turn) + Math.max(0, st.health)*25 + st.shield*10;
+      return v.banked + Math.max(0, st.resonance)*50 + (v.totalTurns + st.turn)*10;
+    }
+    if(st.over==="win"){
+      return 1000 + Math.max(0, 25 - st.turn)*40 + Math.max(0, st.health)*25 + st.shield*10;
+    }
+    return Math.max(0, st.resonance)*50 + st.turn*10;
+  }
+  function calcScore(st){
+    const d = DIFFS[st.diff] || DIFFS.listener;
+    return Math.round(baseScore(st) * d.mult);
+  }
+
+  // ---------- Leaderboard (shared scores) ----------
+  let db = null, user = null, myId = null, boardRows = [], saveBlocked = false, boardReady = false;
+  let handle = "";
+  try { handle = localStorage.getItem("relicsong-handle") || ""; } catch(e){}
+
+  function setBoardNote(t){ $("boardNote").textContent = t; }
+  function cleanHandle(s){ return String(s||"").replace(/\s+/g," ").trim().slice(0,24); }
+
+  async function initBoard(){
+    const c = window.claude;
+    if(!c || typeof c.use !== "function"){ setBoardNote("Open this game in Claude to see scores."); renderBoard(); return; }
+    try { [db, user] = await Promise.all([c.use("db"), c.use("user")]); } catch(e){ db = null; }
+    if(!db){ setBoardNote("Sign in to Claude to see and save scores."); renderBoard(); return; }
+    if(user){
+      myId = await user.id();
+      if(!handle){ const me = await user.me(); handle = cleanHandle(me.name); }
+    }
+    boardReady = true;
+    setBoardNote(myId ? "Your best is highlighted." : "Sign in to save your own score.");
+    db.collection("scores").orderBy("best","desc").limit(10).onSnapshot(
+      (snap)=>{ boardRows = snap.docs.map(d=> ({ id:d.id, ...d.data() })); renderBoard(); },
+      ()=>{ setBoardNote("Scores couldn't load right now."); }
+    );
+    renderBoard();
+    if(S && S.over && !$("endScreen").hidden) showEnd();
+  }
+
+  function renderBoard(){
+    const ol = $("board"); ol.innerHTML = "";
+    if(!boardRows.length){
+      const li = document.createElement("li"); li.className = "empty";
+      li.textContent = boardReady ? "No scores yet. Finish a game to claim the top spot." : "Scores will appear here.";
+      ol.appendChild(li); return;
+    }
+    boardRows.forEach((r, i)=>{
+      const li = document.createElement("li");
+      if(r.id===myId) li.classList.add("me");
+      const rank = document.createElement("span"); rank.className = "rank"; rank.textContent = i+1;
+      const who = document.createElement("span"); who.className = "who";
+      const nm = document.createElement("b"); nm.textContent = r.handle || "A Listener";
+      const sub = document.createElement("span");
+      const games = Number(r.games)||0, wins = Number(r.wins)||0;
+      const dn = (DIFFS[r.bestDifficulty] || DIFFS.listener).name;
+      const voy = r.bestMode==="voyage";
+      sub.textContent = `${r.bestResult==="win" ? (voy ? "Finished a Voyage" : "Won") : (voy ? "Fell on a Voyage" : "Fell")} on ${dn}, ${voy ? `${r.bestTurn ?? "?"} turns` : `turn ${r.bestTurn ?? "?"}`} · ${wins} win${wins===1?"":"s"} in ${games} game${games===1?"":"s"}`;
+      who.append(nm, sub);
+      const pts = document.createElement("span"); pts.className = "pts"; pts.textContent = Number(r.best)||0;
+      li.append(rank, who, pts);
+      ol.appendChild(li);
+    });
+  }
+
+  async function saveScore(nameInput, btn, msg){
+    const h = cleanHandle(nameInput.value);
+    if(!h){ msg.className = "save-msg err"; msg.textContent = "Enter a name first."; nameInput.focus(); return; }
+    if(!db || !myId || S.saved) return;
+    btn.disabled = true; nameInput.disabled = true;
+    msg.className = "save-msg"; msg.textContent = "Saving…";
+    handle = h; try { localStorage.setItem("relicsong-handle", h); } catch(e){}
+    const score = calcScore(S), result = S.over, turn = S.voyage ? S.voyage.totalTurns + S.turn : S.turn;
+    const mode = S.voyage ? "voyage" : "single";
+    try {
+      const ref = db.doc("scores/" + myId);
+      const snap = await ref.get();
+      const prev = snap.exists ? snap.data() : null;
+      const better = !prev || score > (Number(prev.best)||0);
+      const diff = S.diff || "listener";
+      const runs = [{ score, result, turn, diff, mode, at:new Date().toISOString() }, ...((prev && Array.isArray(prev.runs)) ? prev.runs : [])].slice(0, 10);
+      await ref.set({
+        handle: h,
+        best: better ? score : prev.best,
+        bestResult: better ? result : prev.bestResult,
+        bestTurn: better ? turn : prev.bestTurn,
+        bestDifficulty: better ? diff : (prev.bestDifficulty || "listener"),
+        bestMode: better ? mode : (prev.bestMode || "single"),
+        games: ((prev && Number(prev.games)) || 0) + 1,
+        wins: ((prev && Number(prev.wins)) || 0) + (result==="win" ? 1 : 0),
+        runs,
+        updatedAt: new Date().toISOString()
+      });
+      S.saved = true;
+      msg.className = "save-msg ok";
+      msg.textContent = better ? (prev ? "New personal best! Saved to the leaderboard." : "Saved to the leaderboard.") : `Saved. Your best is still ${prev.best}.`;
+      btn.textContent = "Saved";
+    } catch(e){
+      btn.disabled = false; nameInput.disabled = false;
+      msg.className = "save-msg err";
+      if(e && (e.code==="invalid_argument" || e.code==="not_granted")){
+        saveBlocked = true; btn.disabled = true; nameInput.disabled = true;
+        msg.textContent = "Your access to this game doesn't allow saving scores.";
+      } else if(e && e.code==="quota_exceeded"){
+        msg.textContent = "The leaderboard is full.";
+      } else {
+        msg.textContent = "Couldn't save just now. Try again.";
+      }
+    }
+  }
+
   function showEnd(){
-    if(!S.over) return;
+    if(!S.over || S.over==="cleared") return;
     const win = S.over==="win", es = $("endScreen");
-    const why = win ? "You harmonized the tide." : (S.health<=0 ? "Your Health ran out." : "Instability reached 10.");
+    const v = S.voyage;
+    const why = (win ? (v ? `All ${VOYAGE_STORMS} Storms are calmed.` : "You harmonized the tide.") : (S.health<=0 ? "Your Health ran out" : "Instability reached 10") + (v ? ` in Storm ${v.stage} of ${VOYAGE_STORMS}.` : "."));
+    const score = calcScore(S);
     es.innerHTML = `<div class="end-card ${win?"win":"lose"}" role="dialog" aria-modal="true" aria-labelledby="endTitle">
       <h2 id="endTitle">${win ? "Victory" : "Defeat"}</h2>
       <p>${why} ${win ? "The ocean remembers you." : "Memory fractures across Rahdaria."}</p>
-      <div class="end-stats"><span class="pill">Turn <strong>${S.turn}</strong></span><span class="pill">Resonance <strong>${S.resonance}</strong></span><span class="pill">Health <strong>${Math.max(0,S.health)}</strong></span><span class="pill">Instability <strong>${S.instability}</strong></span></div>
-      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn primary" id="againBtn" type="button">Play again</button><button class="btn" id="viewBtn" type="button">Look at the board</button></div>
+      <div class="end-score"><small>Score · ${v ? "Voyage · " : ""}${D().name} ×${D().mult}</small>${score}</div>
+      <div class="end-stats">${v ? `<span class="pill">Storms calmed <strong>${win ? VOYAGE_STORMS : v.stage-1}</strong></span><span class="pill">Total turns <strong>${v.totalTurns + S.turn}</strong></span>` : `<span class="pill">Turn <strong>${S.turn}</strong></span>`}<span class="pill">Resonance <strong>${S.resonance}</strong></span><span class="pill">Health <strong>${Math.max(0,S.health)}</strong></span><span class="pill">Instability <strong>${S.instability}</strong></span></div>
+      <div class="save-box" id="saveBox"></div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn primary" id="againBtn" type="button">Play again</button><button class="btn" id="viewBtn" type="button">Look at the table</button></div>
     </div>`;
+    const box = $("saveBox");
+    if(db && myId && !saveBlocked){
+      const lab = document.createElement("label"); lab.className = "label"; lab.htmlFor = "handleInput"; lab.textContent = "Save to the leaderboard as";
+      const row = document.createElement("div"); row.className = "save-row";
+      const inp = document.createElement("input"); inp.id = "handleInput"; inp.type = "text"; inp.maxLength = 24; inp.autocomplete = "nickname"; inp.placeholder = "Your name"; inp.value = handle;
+      const btn = document.createElement("button"); btn.className = "btn primary"; btn.type = "button"; btn.textContent = "Save";
+      const msg = document.createElement("div"); msg.className = "save-msg";
+      if(S.saved){ btn.disabled = true; inp.disabled = true; btn.textContent = "Saved"; msg.className = "save-msg ok"; msg.textContent = "This game is already on the leaderboard."; }
+      btn.onclick = ()=> saveScore(inp, btn, msg);
+      inp.addEventListener("keydown", (e)=>{ if(e.key==="Enter") saveScore(inp, btn, msg); });
+      row.append(inp, btn); box.append(lab, row, msg);
+    } else {
+      box.innerHTML = `<div class="save-msg">${saveBlocked ? "Your access to this game doesn't allow saving scores." : "Sign in to Claude to save your score to the leaderboard."}</div>`;
+    }
     es.hidden = false;
     (win ? sfx.win : sfx.lose)();
     $("againBtn").onclick = ()=> { es.hidden = true; newGame(); };
@@ -520,20 +1011,25 @@
 
   // ---------- Rendering ----------
   function previewTag(d){
-    const gainsRes = /Resonance/.test(d.text) && !/Swap/.test(d.text);
+    const gainsRes = /Gain \+\d Resonance/.test(d.text);
     if(d.tone===S.tone){
-      if(gainsRes && S.paradox>0) return `<span class="tag meh">Matches tone (Paradox blocks bonus)</span>`;
-      if(gainsRes) return `<span class="tag good">Matches tone: +1 bonus</span>`;
-      return `<span class="tag good">Matches tone</span>`;
+      const ai = answerFor(d.tone);
+      const ans = ai>=0 ? `<span class="tag good">Answers ${INTENTS[S.intents[ai]].name}</span>` : "";
+      if(gainsRes && S.paradox>0) return `<span class="tag meh">Matches tone (Paradox blocks bonus)</span>` + ans;
+      if(gainsRes) return `<span class="tag good">Matches tone: +1 bonus</span>` + ans;
+      return `<span class="tag good">Matches tone</span>` + ans;
     }
+    if(attuned("Tide-Bloom Pendant") && !S.offFree) return `<span class="tag meh">Off-tone: free (Pendant)</span>`;
     return `<span class="tag bad">Off-tone: costs 1 Resonance</span>`;
   }
   function cardHTML(name, opts={}){
     const d = DEFS[name];
+    const count = d.pool ? "Voyage reward" : `× ${d.copies} in deck`;
     return `${opts.key ? `<span class="key">${opts.key}</span>` : ""}
       <div class="title">${name}</div>
-      <div class="type">${d.type} <span class="tone" data-tone="${d.tone}">${d.tone}</span>${opts.copies ? ` <span>× ${d.copies} in deck</span>` : ""}</div>
+      <div class="type">${d.type} <span class="tone" data-tone="${d.tone}">${d.tone}</span>${opts.copies ? ` <span>${count}</span>` : ""}</div>
       <div class="desc">${d.text}</div>
+      ${d.passive ? `<div class="passive">${opts.attuned ? "" : "Attune: "}${d.passive}</div>` : ""}
       <div class="flav">${d.flavor}</div>
       ${opts.tag || ""}`;
   }
@@ -549,17 +1045,48 @@
     $("insMeter").classList.toggle("hot", S.instability>=7);
     $("pHealth").classList.toggle("warn", S.health<=3);
     $("pParadox").classList.toggle("warn", S.paradox>0);
-    $("turnInfo").textContent = `Turn ${S.turn}`;
+    $("turnInfo").textContent = `${S.voyage ? `Storm ${S.voyage.stage} of ${VOYAGE_STORMS} · ` : ""}Turn ${S.turn} · ${D().name}`;
+    $("diffBtn").textContent = "Difficulty: " + DIFFS[diffKey].name;
+    $("modeBtn").textContent = "Mode: " + (modeKey==="voyage" ? "Voyage" : "Single storm");
     const locked = !!S.over || busy;
+    if(locked && !busy) holdMode = false;
+    const hb = $("holdBtn");
+    hb.disabled = locked || !!S.held || S.heldThisTurn;
+    hb.setAttribute("aria-pressed", String(holdMode));
+    hb.textContent = holdMode ? "Pick a card to hold" : (S.held ? "Held slot full" : (S.heldThisTurn ? "Held this turn" : "Hold a card"));
+    $("hand").classList.toggle("holding", holdMode);
+    const ch = $("chorusInfo");
+    const chorusLive = S.chorusAlive && S.paradox===0 && S.turnPlays<3;
+    ch.textContent = S.turnPlays===0 ? (S.paradox===0 ? "Chorus: 3 matching plays" : "Chorus: needs Paradox 0") : (chorusLive ? `Chorus ${S.turnPlays}/3` : (S.turnPlays>=3 && S.chorusAlive ? "Chorus sung" : "No Chorus this turn"));
+    ch.classList.toggle("on", chorusLive && S.turnPlays>0);
+
+    // relic slot and held breath
+    const slotCard = (c, label, empty, playable)=>{
+      const box = document.createElement("div"); box.className = "slot" + (c ? " filled" : "");
+      const lab = document.createElement("span"); lab.className = "label"; lab.textContent = label; box.appendChild(lab);
+      if(!c){ const m = document.createElement("span"); m.className = "muted"; m.textContent = empty; box.appendChild(m); return box; }
+      const d = DEFS[c.name];
+      const el = document.createElement(playable ? "button" : "div");
+      el.className = "card " + (playable ? (d.tone===S.tone ? "match" : "off") : "match");
+      el.dataset.tone = d.tone;
+      if(playable){
+        el.type = "button"; el.disabled = locked;
+        el.setAttribute("aria-label", `Play held card ${c.name}, ${d.tone} ${d.type}. ${d.text}`);
+        el.onclick = ()=> playCard(c.id, el);
+      }
+      el.innerHTML = cardHTML(c.name, { attuned: !playable, tag: playable ? previewTag(d) : "" });
+      box.appendChild(el);
+      return box;
+    };
+    $("attuneSlot").replaceWith(Object.assign(slotCard(S.attuned, "Attuned Relic", "Play a Relic and choose to attune it. It keeps working until a Fracture shatters it.", false), { id:"attuneSlot" }));
+    $("heldSlot").replaceWith(Object.assign(slotCard(S.held, "Held breath", "Once a turn, hold a card here. Drown can't reach it, and you can play it any later turn.", true), { id:"heldSlot" }));
     $("endTurn").disabled = locked;
     if(S.playsLeft>0) $("endTurn").classList.remove("pulse");
     else if(!locked) $("endTurn").classList.add("pulse");
 
-    // pips
     $("pips").innerHTML = [0,1,2].map(i=> `<span class="pip ${i<S.playsLeft?"":"used"}"></span>`).join("");
     $("pips").setAttribute("aria-label", `${S.playsLeft} plays left`);
 
-    // tone dial
     const counts = Object.fromEntries(TONES.map(t=> [t, S.hand.filter(c=> DEFS[c.name].tone===t).length]));
     $("tones").innerHTML = "";
     TONES.forEach(t=>{
@@ -570,11 +1097,34 @@
       b.onclick = ()=> setTone(t);
       $("tones").appendChild(b);
     });
-    $("toneHint").textContent = S.paradox>0
-      ? "Paradox is above 0, so matching cards get no bonus right now. Off-tone cards still cost 1."
-      : "Matching cards glow and get +1 on Resonance gains. The number shows how many you hold.";
+    const freeLeft = Math.max(0, D().free - (S.toneChanges||0));
+    const changeNote = freeLeft>0
+      ? (freeLeft===1 ? "You have 1 free tone change left this turn." : `You have ${freeLeft} free tone changes left this turn.`)
+      : (S.resonance>0 ? "Changing tone costs 1 Resonance." : "Changing tone adds 1 Paradox.");
+    $("toneHint").textContent = (S.paradox>0
+      ? "Paradox blocks the match bonus right now. "
+      : "Matching cards glow and get +1 on Resonance gains. ") + changeNote;
 
-    // hand
+    // storm intents
+    const box = $("intents"); box.innerHTML = "";
+    const chip = (cls, name, desc)=>{
+      const c = document.createElement("span"); c.className = "intent-chip " + cls;
+      const b = document.createElement("b"); b.textContent = name;
+      const s = document.createElement("span"); s.textContent = desc;
+      c.append(b, s); box.appendChild(c);
+    };
+    if(S.over) chip("calm", "Still", "The storm has gone quiet.");
+    else {
+      (S.intents||[]).forEach((k, i)=> {
+        const d = INTENTS[k]; if(!d) return;
+        if(S.answered && S.answered[i]) chip("answered", d.name, "Answered: " + d.soft);
+        else chip("", d.name, d.desc + (COUNTERS[k] ? ` · ${COUNTERS[k]} answers it` : ""));
+      });
+      const tt = D().tide;
+      if(S.turn>=tt) chip("tide", "Rising tide", "+1 Instability every storm turn");
+      else if(S.turn>=tt-2) chip("tide", "Tide is turning", `Rising tide starts on turn ${tt}`);
+    }
+
     const hand = $("hand"); hand.innerHTML = "";
     if(!S.hand.length) hand.innerHTML = `<div class="empty-hand">No cards in hand. Press End Turn to draw.</div>`;
     let delay = 0;
@@ -593,7 +1143,6 @@
     });
     fresh.clear();
 
-    // piles
     $("drawCount").textContent = S.draw.length;
     $("drawStack").classList.toggle("empty", S.draw.length===0);
     $("discCount").textContent = S.discard.length ? `(${S.discard.length})` : "";
@@ -612,41 +1161,105 @@
 
   // ---------- Controls ----------
   function newGame(){
-    S = freshState(); busy = false; fresh.clear();
+    S = freshState(); busy = false; holdMode = false; fresh.clear();
     $("endScreen").hidden = true;
-    log("A new tide begins.", "you");
+    $("choiceScreen").hidden = true; $("choiceScreen").innerHTML = "";
+    log(S.voyage ? `A Voyage begins. Storm 1 of ${VOYAGE_STORMS} rises.` : "A new tide begins.", "you");
     drawCards(5);
+    rollIntents();
     render();
   }
   $("newGame").onclick = newGame;
+
+  let diffReturnFocus = null;
+  function openDiff(){
+    const ds = $("diffScreen");
+    const inProgress = S && !S.over && (S.turn>1 || S.discard.length>0);
+    ds.innerHTML = "";
+    const card = document.createElement("div"); card.className = "diff-card";
+    card.setAttribute("role","dialog"); card.setAttribute("aria-modal","true"); card.setAttribute("aria-labelledby","diffTitle");
+    const h = document.createElement("h2"); h.id = "diffTitle"; h.textContent = "Choose difficulty";
+    const p = document.createElement("p");
+    p.textContent = (inProgress ? "Picking a level starts a new game. " : "") + "Harder levels multiply your score for the leaderboard.";
+    card.append(h, p);
+    Object.entries(DIFFS).forEach(([k, d])=>{
+      const b = document.createElement("button"); b.type = "button"; b.className = "diff-opt"; b.dataset.d = k;
+      b.setAttribute("aria-pressed", String(k===diffKey));
+      const nm = document.createElement("b"); nm.textContent = d.name;
+      const m = document.createElement("span"); m.className = "mult"; m.textContent = "Score ×" + d.mult;
+      const ds2 = document.createElement("span"); ds2.className = "d"; ds2.textContent = d.desc;
+      b.append(nm, m, ds2);
+      b.onclick = ()=> chooseDiff(k);
+      card.appendChild(b);
+    });
+    const cancel = document.createElement("button"); cancel.type = "button"; cancel.className = "btn"; cancel.textContent = "Cancel";
+    cancel.style.alignSelf = "flex-end"; cancel.onclick = closeDiff;
+    card.appendChild(cancel);
+    ds.appendChild(card);
+    ds.onclick = (e)=>{ if(e.target===ds) closeDiff(); };
+    diffReturnFocus = document.activeElement;
+    ds.hidden = false;
+    (card.querySelector('[aria-pressed="true"]') || cancel).focus();
+  }
+  function closeDiff(){
+    $("diffScreen").hidden = true;
+    if(diffReturnFocus && diffReturnFocus.focus) diffReturnFocus.focus();
+  }
+  function chooseDiff(k){
+    diffKey = k;
+    try { localStorage.setItem("relicsong-difficulty", k); } catch(e){}
+    $("diffScreen").hidden = true;
+    newGame();
+    toast(`${DIFFS[k].name} difficulty. Score ×${DIFFS[k].mult}. Good luck.`);
+  }
+  $("diffBtn").onclick = openDiff;
+  $("modeBtn").onclick = ()=>{
+    modeKey = modeKey==="voyage" ? "single" : "voyage";
+    try { localStorage.setItem("relicsong-mode", modeKey); } catch(e){}
+    newGame();
+    toast(modeKey==="voyage" ? `Voyage: calm ${VOYAGE_STORMS} Storms in a row.` : "Single storm: one Storm, one song.");
+  };
+  $("holdBtn").onclick = toggleHold;
+  document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && !$("diffScreen").hidden) closeDiff(); });
   $("endTurn").onclick = ()=> endTurn(false);
   function syncSoundBtn(){ $("soundBtn").textContent = "Sound: " + (soundOn ? "On" : "Off"); $("soundBtn").setAttribute("aria-pressed", String(soundOn)); }
   $("soundBtn").onclick = ()=>{ soundOn = !soundOn; try { localStorage.setItem("relicsong-sound", soundOn ? "on" : "off"); } catch(e){} syncSoundBtn(); if(soundOn) sfx.tone(S.tone); };
   document.addEventListener("keydown", (e)=>{
     if(e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
     if(e.metaKey || e.ctrlKey || e.altKey) return;
-    if(!$("endScreen").hidden) return;
+    if(!$("endScreen").hidden || !$("diffScreen").hidden || !$("choiceScreen").hidden) return;
     if(/^[1-9]$/.test(e.key)){
       const i = +e.key - 1, c = S.hand[i]; if(!c) return;
       const el = $("hand").children[i]; playCard(c.id, el);
     } else if(e.key==="e" || e.key==="E"){ endTurn(false); }
+    else if(e.key==="h" || e.key==="H"){ toggleHold(); }
   });
 
-  // ---------- Boot (keeps an in-progress game across page updates) ----------
+  // ---------- Boot ----------
   window.claude?.hot?.snapshot?.(()=> ({ S, nextId }));
   function start(data){
-    syncSoundBtn(); renderCatalog();
+    syncSoundBtn(); renderCatalog(); renderBoard();
     if(data && data.S && Array.isArray(data.S.hand)){
-      S = data.S; nextId = data.nextId || 1000; render();
-      if(S.over) showEnd();
+      S = data.S; nextId = data.nextId || 1000;
+      if(!Array.isArray(S.intents) || !S.intents.length) rollIntents();
+      if(typeof S.toneChanges!=="number") S.toneChanges = 0;
+      if(!DIFFS[S.diff]) S.diff = "listener";
+      if(!Array.isArray(S.answered) || S.answered.length!==S.intents.length) S.answered = S.intents.map(()=> false);
+      if(typeof S.turnPlays!=="number"){ S.turnPlays = 0; S.chorusAlive = true; S.heldThisTurn = false; S.offFree = false; }
+      if(S.attuned===undefined) S.attuned = null;
+      if(S.held===undefined) S.held = null;
+      if(S.voyage===undefined) S.voyage = null;
+      render();
+      if(S.over==="cleared") showCleared();
+      else if(S.over) showEnd();
     } else {
       newGame();
       toast("Your opening hand is dealt. Pick a tone, then click a card.");
     }
+    initBoard();
   }
   window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 })();
 </script>
-
 </body>
 </html>
