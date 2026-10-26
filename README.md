@@ -1,5 +1,7 @@
 # Prophecy of the Listener: Relicsong Card Game
 
+By Adrian Blackshire
+
 A small card game you play in your web browser. You are the Listener, singing against the Resonance Storm. Reach 10 Resonance before the Storm's Instability reaches 10 or your Health runs out.
 
 **Play it here:** https://coderblack15.github.io/listener-game/

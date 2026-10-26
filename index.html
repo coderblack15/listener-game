@@ -27,6 +27,7 @@
   header { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; justify-content:space-between; }
   h1 { font-family:var(--display); font-weight:400; font-size:clamp(22px, 4vw, 30px); margin:0; letter-spacing:0.5px; text-wrap:balance; }
   h1 small { display:block; font-family:var(--body); font-size:13px; color:var(--muted); letter-spacing:0.2px; margin-top:2px; }
+  h1 small.byline { font-style:italic; }
   .head-btns { display:flex; gap:8px; flex-wrap:wrap; }
 
   .btn { font:inherit; font-weight:600; font-size:14px; background:linear-gradient(180deg,#1d3c59,#133147); border:1px solid var(--line-2); color:var(--text); padding:8px 14px; border-radius:8px; cursor:pointer; transition:filter .15s, transform .1s; }
@@ -258,7 +259,7 @@
 
 <div class="wrap" id="wrap">
   <header>
-    <h1>Prophecy of the Listener<small>Relicsong Card Game. Align your tone, steady the paradox, and outsing the Resonance Storm.</small></h1>
+    <h1>Prophecy of the Listener<small>Relicsong Card Game. Align your tone, steady the paradox, and outsing the Resonance Storm.</small><small class="byline">By Adrian Blackshire</small></h1>
     <div class="head-btns">
       <a class="btn" href="rules.html" style="text-decoration:none">Rules for beginners</a>
       <button class="btn" id="diffBtn" type="button" aria-haspopup="dialog">Difficulty: Listener</button>
