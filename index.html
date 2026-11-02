@@ -265,6 +265,7 @@
       <button class="btn" id="diffBtn" type="button" aria-haspopup="dialog">Difficulty: Listener</button>
       <button class="btn" id="modeBtn" type="button">Mode: Single storm</button>
       <button class="btn" id="soundBtn" type="button" aria-pressed="true">Sound: On</button>
+      <button class="btn" id="linkBtn" type="button" aria-haspopup="dialog">Labyrinth link</button>
       <button class="btn" id="newGame" type="button">New Game</button>
     </div>
   </header>
@@ -418,9 +419,68 @@
   let freshDiscard = false;
 
   function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  // ---------- Labyrinth of Roots link ----------
+  // Labyrinth of Roots (coderblack15.github.io/labyrinth-of-roots) tells Rahdaria's siege; this game
+  // is set long after the city drowned. On GitHub Pages both games share one origin and read each
+  // other's marks: a win here writes relicsong-wins, and ending the blight in Rahdaria's Hanging
+  // Gardens there writes labyrinth-of-roots-rahdaria-saved, which puts the Lantern of Rahdaria in
+  // your starting deck. Anywhere else, each game shows a code the other accepts.
+  const LR_GARDEN = "labyrinth-of-roots-rahdaria-saved", LR_LANTERN = "relicsong-lantern", LR_WINS = "relicsong-wins";
+  const LR_CODE_IN = "GARDENLIGHT", LR_CODE_OUT = "STORMSONG";
+  const LR_URL = "https://coderblack15.github.io/labyrinth-of-roots/";
+  function lrLantern(){ try { return localStorage.getItem(LR_GARDEN)==="1" || localStorage.getItem(LR_LANTERN)==="1"; } catch(e){ return false; } }
+  function lrWins(){ try { const v = JSON.parse(localStorage.getItem(LR_WINS) || "null"); return v && v.n>0 ? v : null; } catch(e){ return null; } }
+  function lrRecordWin(){
+    try {
+      const v = lrWins() || { n:0, diffs:{}, voyage:false };
+      v.n++; v.diffs[S.diff] = true; if(S.voyage) v.voyage = true; v.last = Date.now();
+      localStorage.setItem(LR_WINS, JSON.stringify(v));
+    } catch(e){}
+  }
+  function openLink(){
+    const ds = $("diffScreen");
+    ds.innerHTML = "";
+    const card = document.createElement("div"); card.className = "diff-card";
+    card.setAttribute("role","dialog"); card.setAttribute("aria-modal","true"); card.setAttribute("aria-labelledby","linkTitle");
+    const h = document.createElement("h2"); h.id = "linkTitle"; h.textContent = "Labyrinth of Roots";
+    const p = document.createElement("p");
+    p.innerHTML = `Long before the sea took it, Rahdaria was a garden city under siege. That story is told in <a href="${LR_URL}" target="_blank" rel="noopener" style="color:var(--accent)">Labyrinth of Roots</a>, a text adventure. Played on the same site, the two games find each other on their own. Anywhere else, swap codes.`;
+    const w = lrWins(), has = lrLantern();
+    const a = document.createElement("p");
+    a.textContent = has ? "The Lantern of Rahdaria is in your starting deck. The Hanging Gardens were saved." : "End the blight in Rahdaria's Hanging Gardens to put the Lantern of Rahdaria in your starting deck.";
+    const b = document.createElement("p");
+    b.innerHTML = w ? `You've calmed ${w.n} Storm${w.n===1?"":"s"}. If Labyrinth of Roots asks for a code, it's <strong style="color:var(--gold);letter-spacing:.08em">${LR_CODE_OUT}</strong>.` : "Calm a Storm here to send the Lantern of Rahdaria into Labyrinth of Roots.";
+    card.append(h, p, a, b);
+    if(!has){
+      const lab = document.createElement("label"); lab.className = "label"; lab.htmlFor = "linkInput"; lab.textContent = "Code from Labyrinth of Roots";
+      const row = document.createElement("div"); row.className = "save-row";
+      const inp = document.createElement("input"); inp.id = "linkInput"; inp.type = "text"; inp.maxLength = 24; inp.autocomplete = "off"; inp.spellcheck = false;
+      const go = document.createElement("button"); go.className = "btn primary"; go.type = "button"; go.textContent = "Enter";
+      const msg = document.createElement("div"); msg.className = "save-msg"; msg.setAttribute("role","status");
+      const tryCode = ()=>{
+        if(inp.value.toUpperCase().replace(/[^A-Z]/g,"")===LR_CODE_IN){
+          try { localStorage.setItem(LR_LANTERN, "1"); } catch(e){}
+          msg.className = "save-msg ok"; msg.textContent = "The Lantern of Rahdaria joins your starting deck from your next game.";
+          inp.disabled = true; go.disabled = true;
+        } else { msg.className = "save-msg err"; msg.textContent = "That isn't a Labyrinth of Roots code."; }
+      };
+      go.onclick = tryCode; inp.addEventListener("keydown", (e)=>{ if(e.key==="Enter") tryCode(); });
+      row.append(inp, go); card.append(lab, row, msg);
+    }
+    const close = document.createElement("button"); close.type = "button"; close.className = "btn"; close.textContent = "Close";
+    close.style.alignSelf = "flex-end"; close.onclick = closeDiff;
+    card.appendChild(close);
+    ds.appendChild(card);
+    ds.onclick = (e)=>{ if(e.target===ds) closeDiff(); };
+    diffReturnFocus = document.activeElement;
+    ds.hidden = false;
+    (card.querySelector("input") || close).focus();
+  }
+
   function starterDeck(extra=[]){
     const deck = [];
     Object.entries(DEFS).forEach(([name,d])=>{ for(let i=0;i<d.copies;i++) deck.push({ id:nextId++, name }); });
+    if(lrLantern() && !extra.includes("Lantern of Rahdaria")) deck.push({ id:nextId++, name:"Lantern of Rahdaria" });
     extra.forEach(name=> { if(DEFS[name]) deck.push({ id:nextId++, name }); });
     return shuffle(deck);
   }
@@ -825,7 +885,7 @@
         log(`Storm ${S.voyage.stage} of ${VOYAGE_STORMS} is calmed. The voyage goes on.`, "you");
         setTimeout(showCleared, 500); return;
       }
-      S.over = "win"; log("Victory: The ocean remembers you.", "you");
+      S.over = "win"; log("Victory: The ocean remembers you.", "you"); lrRecordWin();
     }
     else if(S.instability>=10 || S.health<=0){ S.over = "lose"; log("Defeat: Memory fractures across Rahdaria.", "storm"); }
     if(S.over) { holdMode = false; setTimeout(showEnd, 500); }
@@ -986,6 +1046,7 @@
       <p>${why} ${win ? "The ocean remembers you." : "Memory fractures across Rahdaria."}</p>
       <div class="end-score"><small>Score · ${v ? "Voyage · " : ""}${D().name} ×${D().mult}</small>${score}</div>
       <div class="end-stats">${v ? `<span class="pill">Storms calmed <strong>${win ? VOYAGE_STORMS : v.stage-1}</strong></span><span class="pill">Total turns <strong>${v.totalTurns + S.turn}</strong></span>` : `<span class="pill">Turn <strong>${S.turn}</strong></span>`}<span class="pill">Resonance <strong>${S.resonance}</strong></span><span class="pill">Health <strong>${Math.max(0,S.health)}</strong></span><span class="pill">Instability <strong>${S.instability}</strong></span></div>
+      ${win ? `<p style="font-size:14px">Labyrinth of Roots code: <strong style="color:var(--gold);letter-spacing:.08em">${LR_CODE_OUT}</strong>. It brings the Lantern of Rahdaria into <a href="${LR_URL}" target="_blank" rel="noopener" style="color:var(--accent)">the text adventure</a>.</p>` : ""}
       <div class="save-box" id="saveBox"></div>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn primary" id="againBtn" type="button">Play again</button><button class="btn" id="viewBtn" type="button">Look at the table</button></div>
     </div>`;
@@ -1214,6 +1275,7 @@
     toast(`${DIFFS[k].name} difficulty. Score ×${DIFFS[k].mult}. Good luck.`);
   }
   $("diffBtn").onclick = openDiff;
+  $("linkBtn").onclick = openLink;
   $("modeBtn").onclick = ()=>{
     modeKey = modeKey==="voyage" ? "single" : "voyage";
     try { localStorage.setItem("relicsong-mode", modeKey); } catch(e){}
