@@ -17,6 +17,7 @@ A small card game you play in your web browser. You are the Listener, singing ag
 - Make all 3 plays in a turn match your tone for a Chorus bonus.
 - Attune a Relic to keep its passive effect every turn, and hold one card a turn in your held breath slot.
 - Pick a difficulty from Novice to Maelstrom, or switch Mode to Voyage to face three Storms in a row and collect new cards between them.
+- **Labyrinth of Roots link:** this game is set long after Rahdaria, the garden city in [Labyrinth of Roots](https://coderblack15.github.io/labyrinth-of-roots/), drowned. Saving Rahdaria's Hanging Gardens there puts the Lantern of Rahdaria in your starting deck here. Calming a Storm here sends the Lantern into the text adventure. On GitHub Pages the two games find each other on their own. Anywhere else, swap codes with the Labyrinth link button.
 - The leaderboard only works when the game is opened inside Claude. On GitHub Pages it shows a note instead.
 
 ## Files
